@@ -1,24 +1,33 @@
 const Pool = require('pg').Pool
 const pool = new Pool({
-    user: 'postgres',
-    host: 'localhost',
-    database: 'postgres',
-    password: '',
-    port: 5432,
+  user: 'postgres',
+  host: 'localhost',
+  database: 'postgres',
+  password: '',
+  port: 5432,
 })
 // Add sql queries here:
 const employeesMorethan10 = (request, response) => {
-    pool.query('SELECT DISTINCT eid FROM works WHERE hours > 10', (error, results) => {
-        if (error) {
-            throw error
-        }
-        response.status(200).json(results.rows)
-    })
+  pool.query('SELECT DISTINCT eid FROM works WHERE hours > 10', (error, results) => {
+    if (error) {
+      throw error
+    }
+    response.status(200).json(results.rows)
+  })
 }
+
+// TODO: SQL Queries
+// Summary information:
+// Monthly: Total number of new customers, total number of orders, total cost of orders
+// Monthly-Customer: total number of orders by that customer, total cost of orders by that customer
+// Hour-Delivery Location: total number of orders at that hour for that location
+// Rider-Month: total number of orders delivered, avg delivery time, number of ratings for all orders, avg rating
+
+
 
 // Add query functions here:
 module.exports = {
-    employeesMorethan10,
+  employeesMorethan10,
 }
 
 /* Get all users
