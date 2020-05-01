@@ -22,7 +22,7 @@ const employeesMorethan10 = (request, response) => {
 // Monthly: Total number of new customers, total number of orders, total cost of orders
 
 const monthlyOrders = (request, response) => {
-  pool.query('SELECT EXTRACT(orderTime) as month, COUNT(*) as totalOrders FROM Orders GROUP BY EXTRACT(orderTime)', (error, results) => {
+  pool.query('SELECT EXTRACT(month FROM orderTime) as month, COUNT(*) as totalOrders FROM Orders GROUP BY EXTRACT(month FROM orderTime)', (error, results) => {
     if (error) {
       throw error
     }
