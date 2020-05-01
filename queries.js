@@ -20,6 +20,16 @@ const employeesMorethan10 = (request, response) => {
 
 // Summary information for FDS managers:
 // Monthly: Total number of new customers, total number of orders, total cost of orders
+
+const monthlyOrders = (request, response) => {
+  pool.query('SELECT EXTRACT(orderTime) as month, COUNT(*) as totalOrders FROM Orders GROUP BY EXTRACT(orderTime)', (error, results) => {
+    if (error) {
+      throw error
+    }
+    response.status(200).json(results.rows)
+  })
+}
+
 // Monthly-Customer: total number of orders by that customer, total cost of orders by that customer
 // Hour-Delivery Location: total number of orders at that hour for that location
 // Rider-Month: total number of orders delivered, avg delivery time, 
@@ -37,6 +47,7 @@ const employeesMorethan10 = (request, response) => {
 // Add query functions here:
 module.exports = {
   employeesMorethan10,
+  monthlyOrders,
 }
 
 /* Get all users
