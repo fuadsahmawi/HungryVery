@@ -17,12 +17,21 @@ const employeesMorethan10 = (request, response) => {
 }
 
 // TODO: SQL Queries
-// Summary information:
+
+// Summary information for FDS managers:
 // Monthly: Total number of new customers, total number of orders, total cost of orders
 // Monthly-Customer: total number of orders by that customer, total cost of orders by that customer
 // Hour-Delivery Location: total number of orders at that hour for that location
-// Rider-Month: total number of orders delivered, avg delivery time, number of ratings for all orders, avg rating
+// Rider-Month: total number of orders delivered, avg delivery time, 
+//              number of ratings for all orders, avg rating
 
+// Summary information for restaurant staff:
+// Monthly: total num of completed orders, total cost (excl delivery fee), top 5 fav food items
+// Promo Campaign: for each campaign, duration (days/hours), avg number of orders
+
+// Summary information for delivery riders:
+// Weekly-Rider: total number of orders, total hours, total salary
+// Monthly-Rider: total number of orders, total hours, total salary
 
 
 // Add query functions here:
