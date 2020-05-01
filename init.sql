@@ -1,17 +1,5 @@
 /*  TODO:
     Constraints of the tables
-    Makes
-    Do
-    Have
-    Delivers
-    From
-    Employs
-    Sells
-    Manages
-    PartTimeMaintains
-    WeeklyWorkSchedule
-    FullTimeMaintains
-    MonthlyWorkSchedule
 */
 
 CREATE TABLE Customers (
@@ -30,7 +18,7 @@ CREATE TABLE Restaurants (
 	PRIMARY KEY (rid)
 );
 
-CREATE TABLE Menu (
+CREATE TABLE Food (
 	foodid 			INTEGER,
     fname           VARCHAR(60),
 	category 		VARCHAR(20),
@@ -56,12 +44,16 @@ CREATE TABLE Reviews (
     foodReview      VARCHAR(200),
     deliveryRating  INTEGER,
     deliveryReview  VARCHAR(200),
-	PRIMARY KEY (reviewid)
+    cid 			INTEGER,
+    orderid			INTEGER,
+	PRIMARY KEY (reviewid),
+	FOREIGN KEY (cid) references Customers on delete cascade,
+	FOREIGN KEY (orderid) references Orders on delete cascade
 );
 
 CREATE TABLE Orders (
 	orderid 		INTEGER,
-	dlocation		VARCHAR(),
+	dlocation		VARCHAR(200),
 	orderTime       DATETIME,
     assignTime      DATETIME,
     arrivalTime     DATETIME,
@@ -69,21 +61,28 @@ CREATE TABLE Orders (
     deliveryTime    DATETIME,
     deliveryFee     FLOAT,
     totalCost       FLOAT,
-	PRIMARY KEY (orderid)
+    rid 			INTEGER not null,
+    riderid			INTEGER not null,
+	PRIMARY KEY (orderid),
+	FOREIGN KEY (rid) references Restaurants,
+	FOREIGN KEY (riderid) references Riders
 );
-
 
 CREATE TABLE Riders (
 	riderid 		INTEGER,
 	riderName       VARCHAR(60),
 	vnumber         VARCHAR(10),
-	PRIMARY KEY (riderid)
+	mid 			INTEGER not null,
+	PRIMARY KEY (riderid),
+	FOREIGN KEY (mid) references Managers
 );
 
 CREATE TABLE Staffs (
 	staffid			INTEGER,
     sname           VARCHAR(60),
-	PRIMARY KEY (staffid)
+    rid    			INTEGER not null,
+	PRIMARY KEY (staffid),
+	FOREIGN KEY (rid) references Restaurants
 );
 
 CREATE TABLE Managers (
@@ -102,4 +101,48 @@ CREATE TABLE FullTimer (
 	riderid 		INTEGER,
 	MonthlyBaseSalary FLOAT,
 	PRIMARY KEY (riderid) references Riders on delete cascade
+);
+
+CREATE TABLE CreditCard (
+	cardid			INTEGER,
+	cardnumber		INTEGER,
+	cid 			INTEGER not null,
+	PRIMARY KEY (cardid),
+	FOREIGN KEY (cid) references Customers on delete cascade
+)
+
+CREATE TABLE MaintainsPT (
+	day				VARCHAR(10),
+	StartTime       DATETIME,
+	EndTime 		DATETIME,
+	riderid			INTEGER,
+	FOREIGN KEY (riderid) references Riders on delete cascade
+);
+
+CREATE TABLE MaintainsFT (
+	Month 			VARCHAR(10),
+	Year			INTEGER,
+	StartDay		VARCHAR(10),
+	Shift			INTEGER,
+	riderid			INTEGER,
+	FOREIGN KEY (riderid) references Riders on delete cascade
+);
+
+CREATE TABLE Makes (
+	cid 			INTEGER,
+	orderid			INTEGER,
+	foodid			INTEGER,
+	amount          INTEGER,
+	FOREIGN KEY (cid) references Customers,
+	FOREIGN KEY (orderid) references Orders,
+	FOREIGN KEY (foodid) references Food
+);
+
+CREATE TABLE Sells (
+	foodid			INTEGER,
+	promoid			INTEGER,
+	rid 			INTEGER,
+	PRIMARY KEY (foodid) references Food,
+	FOREIGN KEY (promoid) references Promotions,
+	FOREIGN KEY (rid) references Restaurants
 );
