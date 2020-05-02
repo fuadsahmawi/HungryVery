@@ -24,6 +24,7 @@ app.get('/', (request, response) => {
 
 // Add URL to the query functions
 app.get('/q1', db.employeesMorethan10)
+app.get('/q2', db.monthlyOrdersAndCost)
 
 app.listen(port, () => {
   console.log('Server started on port ' + port + '.')
