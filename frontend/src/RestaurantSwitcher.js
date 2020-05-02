@@ -5,8 +5,9 @@ class RestaurantSwitcher extends Component {
   state = { theme: null,
             list: null}
 
-  constructor(){
-    list = this.props.ListOfRestaurants
+  constructor(props){
+    super(props);
+    var list = this.props.ListOfRestaurants
   }
   
   chooseTheme = (theme, evt) => {
