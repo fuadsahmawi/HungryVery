@@ -131,7 +131,7 @@ const monthlyCustomerOrderAndCost = (request, response) => {
 }
 
 // Hour-Delivery Location: total number of orders at that hour for that location
-const hourlyOrderNumbers = (request, response) => {
+const hourlyOrderSummary = (request, response) => {
   const location = request.params.location
   pool.query('SELECT EXTRACT(hour FROM orderTime) as orderHour, COUNT(*) as numberOfOrders FROM Orders GROUP BY EXTRACT(hour FROM orderTime) WHERE dlocation = $1', [location], (error, results) => {
     if (error) {
@@ -143,6 +143,19 @@ const hourlyOrderNumbers = (request, response) => {
 
 // Rider-Month: total number of orders delivered, avg delivery time, 
 //              number of ratings for all orders, avg rating
+const monthyRiderSummary = (request, response) => {
+  pool.query(
+    'SELECT R1.riderid, EXTRACT(month FROM O.orderTime) as month, COUNT(*) as numberOfOrders, SUM(O.totalCost) as totalCostOfOrders ' +
+    'FROM Orders AS O, Riders AS R1, Reviews AS R2 ' +
+    'WHERE R1.riderid = O.riderid ' +
+    'AND R2.orderid = O.orderid ' +
+    'GROUP BY R1.riderid, EXTRACT(month FROM O.orderTime)', (error, results) => {
+      if (error) {
+        throw error
+      }
+      response.status(200).json(results.rows)
+    })
+}
 
 // Summary information for restaurant staff:
 // Monthly: total num of completed orders, total cost (excl delivery fee), top 5 fav food items
@@ -163,8 +176,9 @@ module.exports = {
   deleteCustomer,
   updateCustomer,
   foodList,
-  hourlyOrderNumbers,
-  monthlyCustomerOrderAndCost
+  hourlyOrderSummary,
+  monthlyCustomerOrderAndCost,
+  monthyRiderSummary
 }
 
 /* Get all users

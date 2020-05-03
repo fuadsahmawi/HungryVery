@@ -31,8 +31,9 @@ app.put('/customer/:cid', db.updateCustomer)
 app.get('/restaurant', db.restaurantList)
 app.get('/food', db.foodList)
 app.post('/rstaff', db.addStaff)
-app.get('/hourly-order/:location', db.hourlyOrderNumbers)
+app.get('/hourly-order/:location', db.hourlyOrderSummary)
 app.get('/monthly-cust-order/:cid', db.monthlyCustomerOrderAndCost)
+app.get('/monthly-rider', db.monthlyRiderSummary)
 
 app.listen(port, () => {
   console.log('Server started on port ' + port + '.')
