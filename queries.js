@@ -115,7 +115,32 @@ const monthlyOrdersAndCost = (request, response) => {
 // }
 
 // Monthly-Customer: total number of orders by that customer, total cost of orders by that customer
+const monthlyCustomerOrderAndCost = (request, response) => {
+  const cid = request.params.cid
+  pool.query(
+    'SELECT M.cid, COUNT(*) as numberOfOrders, SUM(O.totalCost) as totalCostOfOrders ' +
+    'FROM Orders AS O INNER JOIN Makes AS M ' +
+    'ON M.orderid = O.orderid ' +
+    'GROUP BY M.cid WHERE M.cid = $1',
+    [cid], (error, results) => {
+      if (error) {
+        throw error
+      }
+      response.status(200).json(results.rows)
+    })
+}
+
 // Hour-Delivery Location: total number of orders at that hour for that location
+const hourlyOrderNumbers = (request, response) => {
+  const location = request.params.location
+  pool.query('SELECT EXTRACT(hour FROM orderTime) as orderHour, COUNT(*) as numberOfOrders FROM Orders GROUP BY EXTRACT(hour FROM orderTime) WHERE dlocation = $1', [location], (error, results) => {
+    if (error) {
+      throw error
+    }
+    response.status(200).json(results.rows)
+  })
+}
+
 // Rider-Month: total number of orders delivered, avg delivery time, 
 //              number of ratings for all orders, avg rating
 
@@ -137,7 +162,9 @@ module.exports = {
   addStaff,
   deleteCustomer,
   updateCustomer,
-  foodList
+  foodList,
+  hourlyOrderNumbers,
+  monthlyCustomerOrderAndCost
 }
 
 /* Get all users
