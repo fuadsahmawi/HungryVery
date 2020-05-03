@@ -6,9 +6,12 @@ const pool = new Pool({
   password: '',
   port: 5432,
 })
-// Add sql queries here:
-const employeesMorethan10 = (request, response) => {
-  pool.query('SELECT DISTINCT eid FROM works WHERE hours > 10', (error, results) => {
+// TODO: SQL Queries
+
+// List of Customers
+
+const customerList = (request, response) => {
+  pool.query('SELECT * FROM Customers', (error, results) => {
     if (error) {
       throw error
     }
@@ -16,7 +19,78 @@ const employeesMorethan10 = (request, response) => {
   })
 }
 
-// TODO: SQL Queries
+// Add new customer
+
+const addCustomer = (request, response) => {
+  const { cname, contact } = request.body
+  pool.query('INSERT INTO Customers(cname, contact) VALUES ($1, $2) RETURNING *', [cname, contact], (error, results) => {
+    if (error) {
+      throw error
+    }
+    response.status(200).json(results.rows)
+  })
+}
+
+// Update details of customer
+
+const updateCustomer = (request, response) => {
+  const { cid } = request.params
+  const { cname, contact } = request.body
+  pool.query('UPDATE Customers SET cname = $1, contact = $2 WHERE cid = $3', [cname, contact, cid], (error, results) => {
+    if (error) {
+      throw error
+    }
+    response.status(200).json(results.rows)
+  })
+}
+
+// Delete customer
+
+const deleteCustomer = (request, response) => {
+  const { cid } = request.params
+  pool.query('DELETE FROM Customers WHERE cid = $1', [cid], (error, results) => {
+    if (error) {
+      throw error
+    }
+    response.status(200).json(results.rows)
+  })
+}
+
+// List of Restaurants
+
+const restaurantList = (request, response) => {
+  pool.query('SELECT * FROM Restaurants', (error, results) => {
+    if (error) {
+      throw error
+    }
+    response.status(200).json(results.rows)
+  })
+}
+
+// List of food by a certain Restaurant
+
+const foodList = (request, response) => {
+  const { rid } = request.body
+  pool.query('SELECT foodid, fname, category, price, available FROM Sells natural join Food WHERE rid = $1', [rid], (error, results) => {
+    if (error) {
+      throw error
+    }
+    response.status(200).json(results.rows)
+  })
+}
+
+
+// Add new restaurant staff
+
+const addStaff = (request, response) => {
+  const { sname, rid } = request.body
+  pool.query('INSERT INTO Staffs(sname, rid) VALUES ($1, $2) RETURNING *', [sname, rid], (error, results) => {
+    if (error) {
+      throw error
+    }
+    response.status(200).json(results.rows)
+  })
+}
 
 // Summary information for FDS managers:
 // Monthly: Total number of new customers, total number of orders, total cost of orders
@@ -56,8 +130,14 @@ const monthlyOrdersAndCost = (request, response) => {
 
 // Add query functions here:
 module.exports = {
-  employeesMorethan10,
   monthlyOrdersAndCost,
+  customerList,
+  restaurantList,
+  addCustomer,
+  addStaff,
+  deleteCustomer,
+  updateCustomer,
+  foodList
 }
 
 /* Get all users
