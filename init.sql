@@ -3,7 +3,7 @@
 */
 
 CREATE TABLE Customers (
-	cid 		    INTEGER,
+	cid 		    SERIAL,
 	cname			VARCHAR(60),
     contact         INTEGER,
     rewardpoints    INTEGER,
@@ -11,7 +11,7 @@ CREATE TABLE Customers (
 );
 
 CREATE TABLE Restaurants (
-	rid 			INTEGER,
+	rid 			SERIAL,
 	rname 		    VARCHAR(60),
     raddress        VARCHAR(300),
 	minOrder        INTEGER,  
@@ -19,7 +19,7 @@ CREATE TABLE Restaurants (
 );
 
 CREATE TABLE Food (
-	foodid 			INTEGER,
+	foodid 			SERIAL,
     fname           VARCHAR(60),
 	category 		VARCHAR(20),
     amountOrdered   INTEGER,
@@ -30,7 +30,7 @@ CREATE TABLE Food (
 );
 
 CREATE TABLE Promotions (
-	promoid 		INTEGER,
+	promoid 		SERIAL,
     pname           VARCHAR(60),
     discount        FLOAT,
     StartDateTime   TIMESTAMP,
@@ -39,13 +39,13 @@ CREATE TABLE Promotions (
 );
 
 CREATE TABLE Managers (
-	mid 			INTEGER,
+	mid 			SERIAL,
 	mname           VARCHAR(60),
 	PRIMARY KEY (mid)
 );
 
 CREATE TABLE Riders (
-	riderid 		INTEGER,
+	riderid 		SERIAL,
 	riderName       VARCHAR(60),
 	vnumber         VARCHAR(10),
 	mid 			INTEGER not null,
@@ -54,7 +54,7 @@ CREATE TABLE Riders (
 );
 
 CREATE TABLE Orders (
-	orderid 		INTEGER,
+	orderid 		SERIAL,
 	dlocation		VARCHAR(200),
 	orderTime       TIMESTAMP,
     assignTime      TIMESTAMP,
@@ -71,7 +71,7 @@ CREATE TABLE Orders (
 );
 
 CREATE TABLE Reviews (
-	reviewid 		INTEGER,
+	reviewid 		SERIAL,
     foodRating      INTEGER,
     foodReview      VARCHAR(200),
     deliveryRating  INTEGER,
@@ -84,7 +84,7 @@ CREATE TABLE Reviews (
 );
 
 CREATE TABLE Staffs (
-	staffid			INTEGER,
+	staffid			SERIAL,
     sname           VARCHAR(60),
     rid    			INTEGER not null,
 	PRIMARY KEY (staffid),
