@@ -116,7 +116,7 @@ const monthlyOrdersAndCost = (request, response) => {
 
 // Monthly-Customer: total number of orders by that customer, total cost of orders by that customer
 const monthlyCustomerOrderAndCost = (request, response) => {
-  const cid = request.params.cid
+  const cid = parseInt(request.params.cid)
   pool.query(
     'SELECT M.cid, COUNT(*) as numberOfOrders, SUM(O.totalCost) as totalCostOfOrders ' +
     'FROM Orders AS O INNER JOIN Makes AS M ' +
@@ -132,7 +132,7 @@ const monthlyCustomerOrderAndCost = (request, response) => {
 
 // Hour-Delivery Location: total number of orders at that hour for that location
 const hourlyOrderSummary = (request, response) => {
-  const location = request.params.location
+  const location = String(request.params.location)
   pool.query('SELECT EXTRACT(hour FROM orderTime) as orderHour, COUNT(*) as numberOfOrders FROM Orders GROUP BY EXTRACT(hour FROM orderTime) WHERE dlocation = $1', [location], (error, results) => {
     if (error) {
       throw error
