@@ -30,6 +30,16 @@ const monthlyOrdersAndCost = (request, response) => {
   })
 }
 
+// TODO: To get new customers, ensure month is current month, and is their first order
+// const monthNewCustomers = (request, response) => {
+//   pool.query('SELECT EXTRACT(month FROM orderTime) as month, COUNT(*) as totalOrders FROM Orders GROUP BY EXTRACT(month FROM orderTime)', (error, results) => {
+//     if (error) {
+//       throw error
+//     }
+//     response.status(200).json(results.rows)
+//   })
+// }
+
 // Monthly-Customer: total number of orders by that customer, total cost of orders by that customer
 // Hour-Delivery Location: total number of orders at that hour for that location
 // Rider-Month: total number of orders delivered, avg delivery time, 
