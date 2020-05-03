@@ -143,7 +143,7 @@ const hourlyOrderSummary = (request, response) => {
 
 // Rider-Month: total number of orders delivered, avg delivery time, 
 //              number of ratings for all orders, avg rating
-const monthyRiderSummary = (request, response) => {
+const monthlyRiderSummary = (request, response) => {
   pool.query(
     'SELECT R1.riderid, EXTRACT(month FROM O.orderTime) as month, COUNT(*) as numberOfOrders, SUM(O.totalCost) as totalCostOfOrders ' +
     'FROM Orders AS O, Riders AS R1, Reviews AS R2 ' +
@@ -163,6 +163,8 @@ const monthyRiderSummary = (request, response) => {
 
 // Summary information for delivery riders:
 // Weekly-Rider: total number of orders, total hours, total salary
+
+
 // Monthly-Rider: total number of orders, total hours, total salary
 
 
@@ -178,7 +180,7 @@ module.exports = {
   foodList,
   hourlyOrderSummary,
   monthlyCustomerOrderAndCost,
-  monthyRiderSummary
+  monthlyRiderSummary
 }
 
 /* Get all users
