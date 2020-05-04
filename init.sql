@@ -106,7 +106,7 @@ CREATE TABLE FullTimer (
 );
 
 CREATE TABLE CreditCard (
-	cardid			INTEGER,
+	cardid			SERIAL,
 	cardnumber		INTEGER,
 	cid 			INTEGER not null,
 	PRIMARY KEY (cardid),
