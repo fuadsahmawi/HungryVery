@@ -2,8 +2,8 @@ const Pool = require('pg').Pool
 const pool = new Pool({
   user: 'postgres',
   host: 'localhost',
-  database: 'postgres',
-  password: '',
+  database: 'test_init',
+  password: '9519',
   port: 5432,
 })
 // TODO: SQL Queries
@@ -159,7 +159,27 @@ const monthlyRiderSummary = (request, response) => {
 
 // Summary information for restaurant staff:
 // Monthly: total num of completed orders, total cost (excl delivery fee), top 5 fav food items
-// Promo Campaign: for each campaign, duration (days/hours), avg number of orders
+
+
+// Promo Campaign: for each campaign, duration (days/hours), avg and total number of orders
+// TODO: avg number of orders per promo campaign
+const promotionsSummary = (request, response) => {
+  pool.query(
+    'SELECT P.promoid, P.pname, ' +
+    // 'COALESCE(DATE_PART(\'day\', enddatetime::timestamp-startdatetime::timestamp), DATE_PART(\'day\', CURRENT_TIME::timestamp-startdatetime::timestamp)) as daysDuration ' +
+    'COALESCE((EXTRACT(EPOCH FROM (enddatetime-startdatetime))/1440), (EXTRACT(EPOCH FROM (CURRENT_TIME-startdatetime))/1440)) as daysDuration' +
+    'COALESCE((EXTRACT(EPOCH FROM (enddatetime-startdatetime))/60), (EXTRACT(EPOCH FROM (CURRENT_TIME-startdatetime))/60)) as hoursDuration' +
+    'COUNT(DISTINCT M.orderid) as numberOfOrders' +
+    'FROM Promotions AS P, Sell AS S, Makes as M ' +
+    'WHERE M.foodid = S.foodid ' +
+    'AND S.promoid = P.promoid ' +
+    'GROUP BY P.promoid ', (error, results) => {
+      if (error) {
+        throw error
+      }
+      response.status(200).json(results.rows)
+    })
+}
 
 // Summary information for delivery riders:
 // Weekly-Rider: total number of orders, total hours, total salary
@@ -180,7 +200,8 @@ module.exports = {
   foodList,
   hourlyOrderSummary,
   monthlyCustomerOrderAndCost,
-  monthlyRiderSummary
+  monthlyRiderSummary,
+  promotionsSummary
 }
 
 /* Get all users
