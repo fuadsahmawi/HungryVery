@@ -39,6 +39,8 @@ app.put('/food/:foodid', db.updateFood)
 app.get('/hourly-order/:location', db.hourlyOrderSummary)
 app.get('/monthly-cust-order/:cid', db.monthlyCustomerOrderAndCost)
 app.get('/monthly-rider', db.monthlyRiderSummary)
+app.get('/monthly-delivery', db.monthlyDeliverySummary)
+app.get('/top-food/:rid', db.topFiveFoodItems)
 
 app.listen(port, () => {
   console.log('Server started on port ' + port + '.')
