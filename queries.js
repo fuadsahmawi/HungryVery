@@ -2,8 +2,8 @@ const Pool = require('pg').Pool
 const pool = new Pool({
   user: 'postgres',
   host: 'localhost',
-  database: 'test_init2',
-  password: '9519',
+  database: 'postgres',
+  password: '',
   port: 5432,
 })
 // TODO: SQL Queries
@@ -206,7 +206,7 @@ const hourlyOrderSummary = (request, response) => {
 //              number of ratings for all orders, avg rating
 const monthlyDeliverySummary = (request, response) => {
   pool.query(
-    'SELECT R1.riderid, EXTRACT(month FROM O.orderTime) as month, COUNT(*) as numberOfOrders, SUM(O.totalCost) as totalCostOfOrders ' +
+    'SELECT R1.riderid, EXTRACT(month FROM O.orderTime) as month, COUNT(DISTINCT O.orderid) as numberOfOrders, SUM(O.totalCost) as totalCostOfOrders ' +
     'FROM Orders AS O, Riders AS R1, Reviews AS R2 ' +
     'WHERE R1.riderid = O.riderid ' +
     'AND R2.orderid = O.orderid ' +
@@ -219,9 +219,21 @@ const monthlyDeliverySummary = (request, response) => {
 }
 
 // Summary information for restaurant staff:
-// Monthly: total num of completed orders, total cost (excl delivery fee), top 5 fav food items
+// Monthly: total num of completed orders, total cost (excl delivery fee)
+const monthlyRestaurantSummary = (request, response) => {
+  const rid = parseInt(request.params.rid)
+  pool.query('SELECT O.rid, EXTRACT(month FROM O.orderTime) as month, COUNT(DISTINCT O.orderid) AS numOrders, SUM(O.totalCost) AS totalCost ' +
+    'FROM Orders as O, Makes as M WHERE O.orderid = M.orderid ' +
+    'AND O.rid = $1 GROUP BY O.rid, EXTRACT(month FROM O.orderTime) ', [rid], (error, results) => {
+      if (error) {
+        throw error
+      }
+      response.status(200).json(results.rows)
+    })
+}
 
-// Monthly: Restaurant top 5 fav food items
+
+// Restaurant top 5 fav food items
 const topFiveFoodItems = (request, response) => {
   const rid = parseInt(request.params.rid)
   pool.query('SELECT X.rid, X.foodid, X.numOrders ' +
@@ -293,6 +305,7 @@ module.exports = {
   monthlyCustomerOrderAndCost,
   monthlyDeliverySummary,
   monthlyRiderSummary,
+  monthlyRestaurantSummary,
   promotionsSummary,
   topFiveFoodItems
 }
