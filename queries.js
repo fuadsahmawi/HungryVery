@@ -10,6 +10,17 @@ const pool = new Pool({
 
 // List of Customers
 
+// Add sql queries here:
+const employeesMorethan10 = (request, response) => {
+  pool.query('SELECT DISTINCT eid FROM works WHERE hours > 10', (error, results) => {
+    if (error) {
+      throw error
+    }
+    response.status(200).json(results.rows)
+  })
+}
+
+
 const customerList = (request, response) => {
   pool.query('SELECT * FROM Customers', (error, results) => {
     if (error) {
@@ -189,7 +200,7 @@ const promotionsSummary = (request, response) => {
 
 
 // Add query functions here:
-module.exports = {
+module.exports = {employeesMorethan10,
   monthlyOrdersAndCost,
   customerList,
   restaurantList,

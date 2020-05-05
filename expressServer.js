@@ -23,6 +23,7 @@ app.get('/', (request, response) => {
 })
 
 // Add URL to the query functions
+app.get('/q1', db.employeesMorethan10)
 app.get('/monthly-summary', db.monthlyOrdersAndCost)
 app.get('/customer', db.customerList)
 app.post('/customer', db.addCustomer)

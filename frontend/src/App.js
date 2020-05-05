@@ -6,6 +6,7 @@ import RestaurantSwitcher from './RestaurantSwitcher';
 
 function App(){
   var [merchants, setMerchants, test] = useState(false);
+  var [selected, updateSelection] = useState("Select Restaurant");
 
   useEffect(() => {
     getMerchant();
@@ -72,7 +73,9 @@ function App(){
         </div>
         
       </div> */}
-    <RestaurantSwitcher ListOfRestaurants={test} ></RestaurantSwitcher>
+      {/*this updates based on the option selected in restaurant switcher*/}
+       {selected}
+    <RestaurantSwitcher onChange={updateSelection} ></RestaurantSwitcher>
     {merchants ? merchants : 'There is no Employee data available'}
     <DropdownButton id="dropdown-basic-button" title="Restaurant">
       <Dropdown.Item href="#/action-1">Action</Dropdown.Item><br />

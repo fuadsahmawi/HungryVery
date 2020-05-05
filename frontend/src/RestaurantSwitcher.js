@@ -18,6 +18,7 @@ class RestaurantSwitcher extends Component {
     evt.preventDefault();
     if (restaurant.toLowerCase() === 'reset') { restaurant = null }
     this.setState({ selected: restaurant });
+    this.props.onChange(restaurant);
   }
 
   getRestaurantList() {
@@ -63,10 +64,10 @@ class RestaurantSwitcher extends Component {
     return (
       <div>
         <div>
-          <span className={`h1 center-block text-center text-${selected ? restaurantClass : 'muted'}`} style={{ marginBottom: 25 }}>{selected || 'Default'}</span>
+          <span className={`h1 center-block text-center text-${selected ? restaurantClass : 'muted'}`} style={{ marginBottom: 25 }}>{selected || 'Select Restaurant'}</span>
           
           <div id="switch" className="center-block text-center">
-            <DropdownButton title={`${selected || 'Select Restaurant'}`}>
+            <DropdownButton title={`${selected || 'Restaurant'}`}>
               {listofRestaurant}
             </DropdownButton>
           </div>
