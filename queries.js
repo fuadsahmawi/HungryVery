@@ -78,11 +78,60 @@ const restaurantList = (request, response) => {
   })
 }
 
+// Add new food
+
+const addFood = (request, response) => {
+  const { fname, category, price, available } = request.body
+  pool.query('INSERT INTO Food(fname, category, price, available) VALUES ($1, $2, $3, $4) RETURNING *', [fname, category, price, available], (error, results) => {
+    if (error) {
+      throw error
+    }
+    response.status(200).json(results.rows)
+  })
+}
+
+// Assign food to a restaurant after adding
+
+const assignFood = (request, response) => {
+  const { foodid, promoid, rid } = request.body
+  pool.query('INSERT INTO Sells(foodid, promoid, rid) VALUES ($1, $2, $3) RETURNING *', [foodid, promoid, rid], (error, results) => {
+    if (error) {
+      throw error
+    }
+    response.status(200).json(results.rows)
+  })
+}
+
+// Update details of Food
+
+const updateFood = (request, response) => {
+  const { foodid } = request.params
+  const { fname, category, price, available } = request.body
+  pool.query('UPDATE Food SET fname = $1, category = $2, price = $3, available = $4 WHERE foodid = $5', [fname, category, price, available, foodid], (error, results) => {
+    if (error) {
+      throw error
+    }
+    response.status(200).json(results.rows)
+  })
+}
+
 // List of food by a certain Restaurant
 
 const foodList = (request, response) => {
-  const { rid } = request.body
+  const { rid } = request.params
   pool.query('SELECT foodid, fname, category, price, available FROM Sells natural join Food WHERE rid = $1', [rid], (error, results) => {
+    if (error) {
+      throw error
+    }
+    response.status(200).json(results.rows)
+  })
+}
+
+// List of reviews by a certain Restaurant
+
+const reviewList = (request, response) => {
+  const { rid } = request.params
+  pool.query('SELECT reviewid, foodRating, foodReview, cname FROM Reviews natural join Orders natural join Customers WHERE rid = $1', [rid], (error, results) => {
     if (error) {
       throw error
     }
@@ -209,6 +258,10 @@ module.exports = {employeesMorethan10,
   deleteCustomer,
   updateCustomer,
   foodList,
+  reviewList,
+  addFood,
+  assignFood,
+  updateFood,
   hourlyOrderSummary,
   monthlyCustomerOrderAndCost,
   monthlyRiderSummary,
