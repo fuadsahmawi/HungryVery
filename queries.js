@@ -139,6 +139,16 @@ const reviewList = (request, response) => {
   })
 }
 
+// List of promotions
+
+const promotionsList = (request, response) => {
+  pool.query('SELECT * FROM Promotions ', (error, results) => {
+    if (error) {
+      throw error
+    }
+    response.status(200).json(results.rows)
+  })
+}
 
 // Add new restaurant staff
 
@@ -252,11 +262,12 @@ const topFiveFoodItems = (request, response) => {
 const promotionsSummary = (request, response) => {
   pool.query(
     'SELECT P.promoid, P.pname, ' +
-    // 'COALESCE(DATE_PART(\'day\', enddatetime::timestamp-startdatetime::timestamp), DATE_PART(\'day\', CURRENT_TIME::timestamp-startdatetime::timestamp)) as daysDuration ' +
-    'COALESCE((EXTRACT(EPOCH FROM (enddatetime-startdatetime))/1440), (EXTRACT(EPOCH FROM (CURRENT_TIME-startdatetime))/1440)) as daysDuration' +
-    'COALESCE((EXTRACT(EPOCH FROM (enddatetime-startdatetime))/60), (EXTRACT(EPOCH FROM (CURRENT_TIME-startdatetime))/60)) as hoursDuration' +
-    'COUNT(DISTINCT M.orderid) as numberOfOrders' +
-    'FROM Promotions AS P, Sell AS S, Makes as M ' +
+    'COALESCE(DATE_PART(\'day\', enddatetime::timestamp-startdatetime::timestamp), DATE_PART(\'day\', NOW()::timestamp-startdatetime::timestamp)) as daysDuration, ' +
+    // 'COALESCE(DATE_PART(\'timezone_hour\', enddatetime::timestamp-startdatetime::timestamp), DATE_PART(\'timezone_hour\', NOW()::timestamp-startdatetime::timestamp)) as hoursDuration, ' +
+    // 'COALESCE((EXTRACT(EPOCH FROM (enddatetime-startdatetime))/1440), (EXTRACT(EPOCH FROM (NOW()-startdatetime))/1440)) as daysDuration, ' +
+    'COALESCE((EXTRACT(EPOCH FROM (enddatetime-startdatetime))/3600), (EXTRACT(EPOCH FROM (NOW()-startdatetime))/3600)) as hoursDuration, ' +
+    'COUNT(DISTINCT M.orderid) as numberOfOrders ' +
+    'FROM Promotions AS P, Sells AS S, Makes as M ' +
     'WHERE M.foodid = S.foodid ' +
     'AND S.promoid = P.promoid ' +
     'GROUP BY P.promoid ', (error, results) => {
@@ -307,7 +318,8 @@ module.exports = {
   monthlyRiderSummary,
   monthlyRestaurantSummary,
   promotionsSummary,
-  topFiveFoodItems
+  topFiveFoodItems,
+  promotionsList
 }
 
 /* Get all users
