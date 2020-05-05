@@ -2,10 +2,15 @@ import React, { Fragment, useEffect, useState } from "react";
 import DropdownButton from 'react-bootstrap/DropdownButton';
 import Dropdown from 'react-bootstrap/Dropdown';
 
+/*
+    Requirements should be met. May want to find name of five best items in each restaurant
+*/
+
 const RestaurantStaff = () => {
     const [restaurant, setRestaurant] = useState([]);
     const [summary, setSummary] = useState([]);
     const [promos, setPromos] = useState([]);
+    const [topfive, setTopfive] = useState([]);
 
     const getRestaurants = async () => {
         try {
@@ -17,11 +22,20 @@ const RestaurantStaff = () => {
         }
     };
 
-    const getSummary = async (evt) => {
+    const getData = async (evt) => {
+        // Monthly total number of completed orders, total cost of completed orders
         try {
             const response = await fetch("http://localhost:3001/monthly-restaurant/" + evt);
             const jsonData = await response.json();
             setSummary(jsonData);
+        } catch (err) {
+            console.error(err.message);
+        }
+        // Top five food items of the restaurant
+        try {
+            const response = await fetch("http://localhost:3001/top-food/" + evt);
+            const jsonData = await response.json();
+            setTopfive(jsonData);
         } catch (err) {
             console.error(err.message);
         }
@@ -44,7 +58,8 @@ const RestaurantStaff = () => {
 
     return (
         <Fragment>
-            <DropdownButton id="dropdown-basic-button" title="Restaurants" onSelect={getSummary}>
+            <h2>Restaurant Staff Page</h2>
+            <DropdownButton id="dropdown-basic-button" title="Restaurants" onSelect={getData}>
                 {restaurant.map(restaurant => (
                     <Dropdown.Item key={restaurant.rid} eventKey={restaurant.rid}>{restaurant.rname}</Dropdown.Item>
                 ))}
@@ -54,7 +69,6 @@ const RestaurantStaff = () => {
             <table class="table">
                 <thead>
                     <tr>
-                        <th>ID</th>
                         <th>Month</th>
                         <th>Number Of Orders</th>
                         <th>Total Cost</th>
@@ -63,10 +77,27 @@ const RestaurantStaff = () => {
                 <tbody>
                     {summary.map(summary => (
                         <tr>
-                            <td>{summary.rid}</td>
                             <td>{summary.month}</td>
                             <td>{summary.numOrders}</td>
                             <td>{summary.totalCost}</td>
+                        </tr>
+                    ))}
+                </tbody>
+            </table>
+            <br />
+            <h2>Top-Five items for restaurant</h2>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Food ID</th>
+                        <th>Number of Orders</th>                        
+                    </tr>
+                </thead>
+                <tbody>
+                    {topfive.map(topfive => (
+                        <tr>
+                            <td>{topfive.foodid}</td>
+                            <td>{topfive.numorders}</td>
                         </tr>
                     ))}
                 </tbody>
