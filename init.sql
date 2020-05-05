@@ -3,15 +3,15 @@
 */
 
 CREATE TABLE Customers (
-	cid 		    INTEGER,
+	cid 		    SERIAL,
 	cname			VARCHAR(60),
     contact         INTEGER,
     rewardpoints    INTEGER,
-	PRIMARY KEY (customerid)
+	PRIMARY KEY (cid)
 );
 
 CREATE TABLE Restaurants (
-	rid 			INTEGER,
+	rid 			SERIAL,
 	rname 		    VARCHAR(60),
     raddress        VARCHAR(300),
 	minOrder        INTEGER,  
@@ -19,7 +19,7 @@ CREATE TABLE Restaurants (
 );
 
 CREATE TABLE Food (
-	foodid 			INTEGER,
+	foodid 			SERIAL,
     fname           VARCHAR(60),
 	category 		VARCHAR(20),
     amountOrdered   INTEGER,
@@ -30,16 +30,48 @@ CREATE TABLE Food (
 );
 
 CREATE TABLE Promotions (
-	promoid 		INTEGER,
+	promoid 		SERIAL,
     pname           VARCHAR(60),
     discount        FLOAT,
-    StartDateTime   DATETIME,
-    EndDateTime     DATETIME,
+    StartDateTime   TIMESTAMP,
+    EndDateTime     TIMESTAMP,
 	PRIMARY KEY (promoid)
 );
 
+CREATE TABLE Managers (
+	mid 			SERIAL,
+	mname           VARCHAR(60),
+	PRIMARY KEY (mid)
+);
+
+CREATE TABLE Riders (
+	riderid 		SERIAL,
+	riderName       VARCHAR(60),
+	vnumber         VARCHAR(10),
+	mid 			INTEGER not null,
+	PRIMARY KEY (riderid),
+	FOREIGN KEY (mid) references Managers
+);
+
+CREATE TABLE Orders (
+	orderid 		SERIAL,
+	dlocation		VARCHAR(200),
+	orderTime       TIMESTAMP,
+    assignTime      TIMESTAMP,
+    arrivalTime     TIMESTAMP,
+    departTime      TIMESTAMP,
+    deliveryTime    TIMESTAMP,
+    deliveryFee     FLOAT,
+    totalCost       FLOAT,
+    rid 			INTEGER not null,
+    riderid			INTEGER not null,
+	PRIMARY KEY (orderid),
+	FOREIGN KEY (rid) references Restaurants,
+	FOREIGN KEY (riderid) references Riders
+);
+
 CREATE TABLE Reviews (
-	reviewid 		INTEGER,
+	reviewid 		SERIAL,
     foodRating      INTEGER,
     foodReview      VARCHAR(200),
     deliveryRating  INTEGER,
@@ -51,70 +83,40 @@ CREATE TABLE Reviews (
 	FOREIGN KEY (orderid) references Orders on delete cascade
 );
 
-CREATE TABLE Orders (
-	orderid 		INTEGER,
-	dlocation		VARCHAR(200),
-	orderTime       DATETIME,
-    assignTime      DATETIME,
-    arrivalTime     DATETIME,
-    departTime      DATETIME,
-    deliveryTime    DATETIME,
-    deliveryFee     FLOAT,
-    totalCost       FLOAT,
-    rid 			INTEGER not null,
-    riderid			INTEGER not null,
-	PRIMARY KEY (orderid),
-	FOREIGN KEY (rid) references Restaurants,
-	FOREIGN KEY (riderid) references Riders
-);
-
-CREATE TABLE Riders (
-	riderid 		INTEGER,
-	riderName       VARCHAR(60),
-	vnumber         VARCHAR(10),
-	mid 			INTEGER not null,
-	PRIMARY KEY (riderid),
-	FOREIGN KEY (mid) references Managers
-);
-
 CREATE TABLE Staffs (
-	staffid			INTEGER,
+	staffid			SERIAL,
     sname           VARCHAR(60),
     rid    			INTEGER not null,
 	PRIMARY KEY (staffid),
 	FOREIGN KEY (rid) references Restaurants
 );
 
-CREATE TABLE Managers (
-	mid 			INTEGER,
-	mname           VARCHAR(60),
-	PRIMARY KEY (mid)
-);
-
 CREATE TABLE PartTimer (
 	riderid 		INTEGER,
 	WeeklyBaseSalary  FLOAT,
-	PRIMARY KEY (riderid) references Riders on delete cascade
+	PRIMARY KEY (riderid),
+	FOREIGN KEY (riderid) references Riders on delete cascade
 );
 
 CREATE TABLE FullTimer (
 	riderid 		INTEGER,
 	MonthlyBaseSalary FLOAT,
-	PRIMARY KEY (riderid) references Riders on delete cascade
+	PRIMARY KEY (riderid),
+	FOREIGN KEY (riderid) references Riders on delete cascade
 );
 
 CREATE TABLE CreditCard (
-	cardid			INTEGER,
+	cardid			SERIAL,
 	cardnumber		INTEGER,
 	cid 			INTEGER not null,
 	PRIMARY KEY (cardid),
 	FOREIGN KEY (cid) references Customers on delete cascade
-)
+);
 
 CREATE TABLE MaintainsPT (
 	day				VARCHAR(10),
-	StartTime       DATETIME,
-	EndTime 		DATETIME,
+	StartTime       TIMESTAMP,
+	EndTime 		TIMESTAMP,
 	riderid			INTEGER,
 	FOREIGN KEY (riderid) references Riders on delete cascade
 );
@@ -142,7 +144,8 @@ CREATE TABLE Sells (
 	foodid			INTEGER,
 	promoid			INTEGER,
 	rid 			INTEGER,
-	PRIMARY KEY (foodid) references Food,
+	PRIMARY KEY (foodid),
+	FOREIGN KEY (foodid) references Food,
 	FOREIGN KEY (promoid) references Promotions,
 	FOREIGN KEY (rid) references Restaurants
 );
