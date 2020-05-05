@@ -1,3 +1,23 @@
+/* Drops all Tables */
+
+DROP TABLE Reviews;
+DROP TABLE Makes;
+DROP TABLE Orders;
+DROP TABLE Staff;
+DROP TABLE Staffs;
+DROP TABLE Sells;
+DROP TABLE Restaurants;
+DROP TABLE Food;
+DROP TABLE Promotions;
+DROP TABLE CreditCard;
+DROP TABLE Customers;
+DROP TABLE PartTimer;
+DROP TABLE FullTimer;
+DROP TABLE MaintainsPT;
+DROP TABLE MaintainsFT;
+DROP TABLE Riders;
+DROP TABLE Managers;
+
 /* Create all Tables */
 
 CREATE TABLE Customers (
@@ -18,7 +38,7 @@ CREATE TABLE Restaurants (
 
 CREATE TABLE Food (
 	foodid 			SERIAL,
-    fname           VARCHAR(60),
+    fname           VARCHAR(20),
 	category 		VARCHAR(20),
     amountOrdered   INTEGER,
     orderLimit      INTEGER,
@@ -71,9 +91,9 @@ CREATE TABLE Orders (
 CREATE TABLE Reviews (
 	reviewid 		SERIAL,
     foodRating      INTEGER,
-    foodReview      VARCHAR(200),
+    foodReview      VARCHAR(1000),
     deliveryRating  INTEGER,
-    deliveryReview  VARCHAR(200),
+    deliveryReview  VARCHAR(1000),
     cid 			INTEGER,
     orderid			INTEGER,
 	PRIMARY KEY (reviewid),
@@ -81,7 +101,7 @@ CREATE TABLE Reviews (
 	FOREIGN KEY (orderid) references Orders on delete cascade
 );
 
-CREATE TABLE Staffs (
+CREATE TABLE Staff (
 	staffid			SERIAL,
     sname           VARCHAR(60),
     rid    			INTEGER not null,
@@ -105,7 +125,7 @@ CREATE TABLE FullTimer (
 
 CREATE TABLE CreditCard (
 	cardid			SERIAL,
-	cardnumber		INTEGER,
+	cardnumber		VARCHAR(20),
 	cid 			INTEGER not null,
 	PRIMARY KEY (cardid),
 	FOREIGN KEY (cid) references Customers on delete cascade
@@ -6720,108 +6740,108 @@ Cras mi pede, malesuada in, imperdiet et, commodo vulputate, justo. In blandit u
 
 Proin interdum mauris non ligula pellentesque ultrices. Phasellus id sapien in sapien iaculis congue. Vivamus metus arcu, adipiscing molestie, hendrerit at, vulputate vitae, nisl.', 495, 832);
 
-/* Populate Staffs */
+/* Populate Staff */
 
-insert into Staffs (sname, rid) values ('Ludwig', 12);
-insert into Staffs (sname, rid) values ('Ernest', 83);
-insert into Staffs (sname, rid) values ('Jake', 70);
-insert into Staffs (sname, rid) values ('Phil', 91);
-insert into Staffs (sname, rid) values ('Harrie', 27);
-insert into Staffs (sname, rid) values ('Dolli', 28);
-insert into Staffs (sname, rid) values ('Liuka', 28);
-insert into Staffs (sname, rid) values ('Marla', 96);
-insert into Staffs (sname, rid) values ('Cary', 84);
-insert into Staffs (sname, rid) values ('Stanly', 8);
-insert into Staffs (sname, rid) values ('Alyss', 36);
-insert into Staffs (sname, rid) values ('Jamie', 83);
-insert into Staffs (sname, rid) values ('Cammy', 39);
-insert into Staffs (sname, rid) values ('Lanita', 55);
-insert into Staffs (sname, rid) values ('Julie', 10);
-insert into Staffs (sname, rid) values ('Darsie', 61);
-insert into Staffs (sname, rid) values ('Myrlene', 38);
-insert into Staffs (sname, rid) values ('Merrili', 44);
-insert into Staffs (sname, rid) values ('Damita', 76);
-insert into Staffs (sname, rid) values ('Dora', 92);
-insert into Staffs (sname, rid) values ('Heddi', 64);
-insert into Staffs (sname, rid) values ('Earle', 20);
-insert into Staffs (sname, rid) values ('Ruddie', 85);
-insert into Staffs (sname, rid) values ('Bobbie', 94);
-insert into Staffs (sname, rid) values ('Antony', 62);
-insert into Staffs (sname, rid) values ('Amble', 99);
-insert into Staffs (sname, rid) values ('Zahara', 69);
-insert into Staffs (sname, rid) values ('Jephthah', 73);
-insert into Staffs (sname, rid) values ('Zonnya', 96);
-insert into Staffs (sname, rid) values ('Jeffrey', 81);
-insert into Staffs (sname, rid) values ('Gunter', 89);
-insert into Staffs (sname, rid) values ('Wren', 22);
-insert into Staffs (sname, rid) values ('Tuesday', 82);
-insert into Staffs (sname, rid) values ('Eleni', 6);
-insert into Staffs (sname, rid) values ('Hermione', 47);
-insert into Staffs (sname, rid) values ('Haskel', 35);
-insert into Staffs (sname, rid) values ('Boote', 55);
-insert into Staffs (sname, rid) values ('Brewster', 20);
-insert into Staffs (sname, rid) values ('Berni', 36);
-insert into Staffs (sname, rid) values ('Rhea', 61);
-insert into Staffs (sname, rid) values ('Olag', 69);
-insert into Staffs (sname, rid) values ('Hansiain', 62);
-insert into Staffs (sname, rid) values ('Gerri', 92);
-insert into Staffs (sname, rid) values ('Susette', 7);
-insert into Staffs (sname, rid) values ('Bertine', 37);
-insert into Staffs (sname, rid) values ('Dallas', 85);
-insert into Staffs (sname, rid) values ('Pall', 50);
-insert into Staffs (sname, rid) values ('Sven', 76);
-insert into Staffs (sname, rid) values ('Emily', 88);
-insert into Staffs (sname, rid) values ('Angelika', 101);
-insert into Staffs (sname, rid) values ('Gabbie', 84);
-insert into Staffs (sname, rid) values ('Tabb', 91);
-insert into Staffs (sname, rid) values ('Colline', 68);
-insert into Staffs (sname, rid) values ('Tiphanie', 10);
-insert into Staffs (sname, rid) values ('Johannes', 20);
-insert into Staffs (sname, rid) values ('Clarabelle', 86);
-insert into Staffs (sname, rid) values ('Kailey', 39);
-insert into Staffs (sname, rid) values ('Corine', 101);
-insert into Staffs (sname, rid) values ('Val', 17);
-insert into Staffs (sname, rid) values ('Hagan', 64);
-insert into Staffs (sname, rid) values ('Albie', 12);
-insert into Staffs (sname, rid) values ('Riannon', 84);
-insert into Staffs (sname, rid) values ('Gordy', 50);
-insert into Staffs (sname, rid) values ('Drusi', 87);
-insert into Staffs (sname, rid) values ('Hazlett', 79);
-insert into Staffs (sname, rid) values ('Riki', 52);
-insert into Staffs (sname, rid) values ('Marcela', 16);
-insert into Staffs (sname, rid) values ('Rhiamon', 85);
-insert into Staffs (sname, rid) values ('Haydon', 19);
-insert into Staffs (sname, rid) values ('Cara', 37);
-insert into Staffs (sname, rid) values ('Elmira', 72);
-insert into Staffs (sname, rid) values ('Daisey', 101);
-insert into Staffs (sname, rid) values ('Linnet', 93);
-insert into Staffs (sname, rid) values ('Melodee', 44);
-insert into Staffs (sname, rid) values ('Nadeen', 86);
-insert into Staffs (sname, rid) values ('Frederich', 31);
-insert into Staffs (sname, rid) values ('Joellyn', 77);
-insert into Staffs (sname, rid) values ('Marigold', 76);
-insert into Staffs (sname, rid) values ('Germain', 19);
-insert into Staffs (sname, rid) values ('Buiron', 14);
-insert into Staffs (sname, rid) values ('Germaine', 92);
-insert into Staffs (sname, rid) values ('Bradley', 10);
-insert into Staffs (sname, rid) values ('Doloritas', 84);
-insert into Staffs (sname, rid) values ('Joaquin', 28);
-insert into Staffs (sname, rid) values ('Tulley', 75);
-insert into Staffs (sname, rid) values ('Hulda', 75);
-insert into Staffs (sname, rid) values ('Sancho', 44);
-insert into Staffs (sname, rid) values ('Frankie', 5);
-insert into Staffs (sname, rid) values ('Bale', 24);
-insert into Staffs (sname, rid) values ('Derrik', 86);
-insert into Staffs (sname, rid) values ('Dallas', 62);
-insert into Staffs (sname, rid) values ('Zebedee', 98);
-insert into Staffs (sname, rid) values ('Dewitt', 72);
-insert into Staffs (sname, rid) values ('Jereme', 37);
-insert into Staffs (sname, rid) values ('Leesa', 53);
-insert into Staffs (sname, rid) values ('Lizabeth', 4);
-insert into Staffs (sname, rid) values ('Artemas', 69);
-insert into Staffs (sname, rid) values ('Currie', 27);
-insert into Staffs (sname, rid) values ('Valli', 1);
-insert into Staffs (sname, rid) values ('Woody', 6);
+insert into Staff (sname, rid) values ('Ludwig', 12);
+insert into Staff (sname, rid) values ('Ernest', 83);
+insert into Staff (sname, rid) values ('Jake', 70);
+insert into Staff (sname, rid) values ('Phil', 91);
+insert into Staff (sname, rid) values ('Harrie', 27);
+insert into Staff (sname, rid) values ('Dolli', 28);
+insert into Staff (sname, rid) values ('Liuka', 28);
+insert into Staff (sname, rid) values ('Marla', 96);
+insert into Staff (sname, rid) values ('Cary', 84);
+insert into Staff (sname, rid) values ('Stanly', 8);
+insert into Staff (sname, rid) values ('Alyss', 36);
+insert into Staff (sname, rid) values ('Jamie', 83);
+insert into Staff (sname, rid) values ('Cammy', 39);
+insert into Staff (sname, rid) values ('Lanita', 55);
+insert into Staff (sname, rid) values ('Julie', 10);
+insert into Staff (sname, rid) values ('Darsie', 61);
+insert into Staff (sname, rid) values ('Myrlene', 38);
+insert into Staff (sname, rid) values ('Merrili', 44);
+insert into Staff (sname, rid) values ('Damita', 76);
+insert into Staff (sname, rid) values ('Dora', 92);
+insert into Staff (sname, rid) values ('Heddi', 64);
+insert into Staff (sname, rid) values ('Earle', 20);
+insert into Staff (sname, rid) values ('Ruddie', 85);
+insert into Staff (sname, rid) values ('Bobbie', 94);
+insert into Staff (sname, rid) values ('Antony', 62);
+insert into Staff (sname, rid) values ('Amble', 99);
+insert into Staff (sname, rid) values ('Zahara', 69);
+insert into Staff (sname, rid) values ('Jephthah', 73);
+insert into Staff (sname, rid) values ('Zonnya', 96);
+insert into Staff (sname, rid) values ('Jeffrey', 81);
+insert into Staff (sname, rid) values ('Gunter', 89);
+insert into Staff (sname, rid) values ('Wren', 22);
+insert into Staff (sname, rid) values ('Tuesday', 82);
+insert into Staff (sname, rid) values ('Eleni', 6);
+insert into Staff (sname, rid) values ('Hermione', 47);
+insert into Staff (sname, rid) values ('Haskel', 35);
+insert into Staff (sname, rid) values ('Boote', 55);
+insert into Staff (sname, rid) values ('Brewster', 20);
+insert into Staff (sname, rid) values ('Berni', 36);
+insert into Staff (sname, rid) values ('Rhea', 61);
+insert into Staff (sname, rid) values ('Olag', 69);
+insert into Staff (sname, rid) values ('Hansiain', 62);
+insert into Staff (sname, rid) values ('Gerri', 92);
+insert into Staff (sname, rid) values ('Susette', 7);
+insert into Staff (sname, rid) values ('Bertine', 37);
+insert into Staff (sname, rid) values ('Dallas', 85);
+insert into Staff (sname, rid) values ('Pall', 50);
+insert into Staff (sname, rid) values ('Sven', 76);
+insert into Staff (sname, rid) values ('Emily', 88);
+insert into Staff (sname, rid) values ('Angelika', 101);
+insert into Staff (sname, rid) values ('Gabbie', 84);
+insert into Staff (sname, rid) values ('Tabb', 91);
+insert into Staff (sname, rid) values ('Colline', 68);
+insert into Staff (sname, rid) values ('Tiphanie', 10);
+insert into Staff (sname, rid) values ('Johannes', 20);
+insert into Staff (sname, rid) values ('Clarabelle', 86);
+insert into Staff (sname, rid) values ('Kailey', 39);
+insert into Staff (sname, rid) values ('Corine', 101);
+insert into Staff (sname, rid) values ('Val', 17);
+insert into Staff (sname, rid) values ('Hagan', 64);
+insert into Staff (sname, rid) values ('Albie', 12);
+insert into Staff (sname, rid) values ('Riannon', 84);
+insert into Staff (sname, rid) values ('Gordy', 50);
+insert into Staff (sname, rid) values ('Drusi', 87);
+insert into Staff (sname, rid) values ('Hazlett', 79);
+insert into Staff (sname, rid) values ('Riki', 52);
+insert into Staff (sname, rid) values ('Marcela', 16);
+insert into Staff (sname, rid) values ('Rhiamon', 85);
+insert into Staff (sname, rid) values ('Haydon', 19);
+insert into Staff (sname, rid) values ('Cara', 37);
+insert into Staff (sname, rid) values ('Elmira', 72);
+insert into Staff (sname, rid) values ('Daisey', 101);
+insert into Staff (sname, rid) values ('Linnet', 93);
+insert into Staff (sname, rid) values ('Melodee', 44);
+insert into Staff (sname, rid) values ('Nadeen', 86);
+insert into Staff (sname, rid) values ('Frederich', 31);
+insert into Staff (sname, rid) values ('Joellyn', 77);
+insert into Staff (sname, rid) values ('Marigold', 76);
+insert into Staff (sname, rid) values ('Germain', 19);
+insert into Staff (sname, rid) values ('Buiron', 14);
+insert into Staff (sname, rid) values ('Germaine', 92);
+insert into Staff (sname, rid) values ('Bradley', 10);
+insert into Staff (sname, rid) values ('Doloritas', 84);
+insert into Staff (sname, rid) values ('Joaquin', 28);
+insert into Staff (sname, rid) values ('Tulley', 75);
+insert into Staff (sname, rid) values ('Hulda', 75);
+insert into Staff (sname, rid) values ('Sancho', 44);
+insert into Staff (sname, rid) values ('Frankie', 5);
+insert into Staff (sname, rid) values ('Bale', 24);
+insert into Staff (sname, rid) values ('Derrik', 86);
+insert into Staff (sname, rid) values ('Dallas', 62);
+insert into Staff (sname, rid) values ('Zebedee', 98);
+insert into Staff (sname, rid) values ('Dewitt', 72);
+insert into Staff (sname, rid) values ('Jereme', 37);
+insert into Staff (sname, rid) values ('Leesa', 53);
+insert into Staff (sname, rid) values ('Lizabeth', 4);
+insert into Staff (sname, rid) values ('Artemas', 69);
+insert into Staff (sname, rid) values ('Currie', 27);
+insert into Staff (sname, rid) values ('Valli', 1);
+insert into Staff (sname, rid) values ('Woody', 6);
 
 /* Populate PartTimer */
 
