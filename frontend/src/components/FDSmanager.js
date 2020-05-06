@@ -11,7 +11,6 @@ import Dropdown from 'react-bootstrap/Dropdown';
 const FDSManager = () => {
     const [monthlyOrdersAndCost, setMonthlyOrdersAndCost] = useState([]);
     const [hourlyOrderSummary, setHourlyOrderSummary] = useState([]);
-    const [locations, setLocations] = useState([]);
     const [monthlyDeliverySummary, setMonthlyDeliverySummary] = useState([]);
 
     const getMonthlyOrdersAndCost = async () => {

@@ -12,6 +12,27 @@ const RestaurantStaff = () => {
     const [promos, setPromos] = useState([]);
     const [topfive, setTopfive] = useState([]);
 
+    const [fname, setFname] = useState("");
+    const [category, setCategory] = useState("");
+    const [amountOrdered, setAmountOrdered] = useState("");
+    const [orderLimit, setOrderLimit] = useState("");
+    const [price, setPrice] = useState("");
+
+    const postFood = async (e) => {
+        e.preventDefault();
+        try {
+            const body = {fname,category,amountOrdered,orderLimit,price}
+            const response = await fetch("http://localhost:3001/food",{
+                method: "POST",
+                headers: {"Content-Type":"application/json"},
+                body: JSON.stringify(body)
+            });
+            console.log(response);
+        } catch (err) {
+            console.error(err.message);
+        }
+    }; 
+
     const getRestaurants = async () => {
         try {
             const response = await fetch("http://localhost:3001/restaurant");
@@ -64,6 +85,47 @@ const RestaurantStaff = () => {
                     <Dropdown.Item key={restaurant.rid} eventKey={restaurant.rid}>{restaurant.rname}</Dropdown.Item>
                 ))}
             </DropdownButton>
+            <h4 className="text-center mt-5">Upload new food item</h4>
+            <form className="d-flex mt-5" onSubmit={postFood}>
+                <input 
+                    type="text" 
+                    className="form-control" 
+                    value={fname} 
+                    placeholder="Food name"
+                    onChange={e => setFname(e.target.value)}>
+                </input>
+                <input 
+                    type="text" 
+                    className="form-control" 
+                    value={category} 
+                    placeholder="Category"
+                    onChange={e => setCategory(e.target.value)}>
+                </input>
+                <input 
+                    type="text" 
+                    className="form-control" 
+                    value={amountOrdered} 
+                    placeholder="Amount Ordered"
+                    onChange={e => setAmountOrdered(e.target.value)}>
+                </input>
+                <input 
+                    type="text" 
+                    className="form-control" 
+                    value={orderLimit} 
+                    placeholder="Number for Order Limit"
+                    onChange={e => setOrderLimit(e.target.value)}>
+                </input>
+                <input 
+                    type="text" 
+                    className="form-control" 
+                    value={price} 
+                    placeholder="Price"
+                    onChange={e => setPrice(e.target.value)}>
+                </input>
+                
+                <button className="btn btn-success">Submit</button>
+            </form>
+
             <br />
             <h4 className="text-center mt-5">Staff Summary Table</h4>
             <table class="table">
