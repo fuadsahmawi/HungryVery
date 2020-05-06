@@ -62,9 +62,9 @@ const FDSManager = () => {
 
     return (
         <Fragment>
-            <h2>FDS Manager Page</h2>
+            <h4 className="text-center mt-5">FDS Manager Page</h4>
             <br />
-            <h2>Summary for each month</h2>
+            <h4 className="text-center mt-5">Monthly Order Summary</h4>
             <table class="table">
                 <thead>
                     <tr>
@@ -84,7 +84,7 @@ const FDSManager = () => {
                 </tbody>
             </table>
             <br />
-            <h2>Rider Monthly Summary Table</h2>
+            <h4 className="text-center mt-5">Monthly Summary of Rider Performance</h4>
             <table class="table">
                 <thead>
                     <tr>

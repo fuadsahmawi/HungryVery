@@ -22,25 +22,25 @@ const RiderSummary = () => {
 
     return (
         <Fragment>
-            <h2>Rider Summary Page</h2>
+            <h4 className="text-center mt-5">Rider Summary Page</h4>
             <form className="d-flex mt-5" onSubmit={getSummary}>
                 <input 
                     type="text" 
                     className="form-control" 
                     value={riderid} 
+                    placeholder="Type Rider ID here"
                     onChange={e => setRider(e.target.value)}>
                 </input>
                 <button className="btn btn-success">Submit</button>
             </form>
-            <h2>Rider Monthly Summary Table</h2>
+            <h4 className="text-center mt-5">Rider Monthly Performance Table</h4>
             <table class="table">
                 <thead>
                     <tr>
                         <th>Month</th>
                         <th>Number Of Orders Delivered</th>
-                        {/* <th>Average Delivery Time</th>
-                        <th>Number of ratings over all orders</th>
-                        <th>Average Rating</th> */}
+                        <th>Total Delivery Fees</th>
+                        <th>Average Delivery Time</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -48,6 +48,8 @@ const RiderSummary = () => {
                         <tr>
                             <td>{summary.month}</td>
                             <td>{summary.numberoforders}</td>
+                            <td>{summary.totaldeliveryfees}</td>
+                            <td>{summary.averagedeliverytime}</td>
                         </tr>
                     ))}
                 </tbody>
