@@ -7,9 +7,7 @@ function Customer(){
 
   return (
     <div>
-      <br/>
-      <h2> Browse Restaurants </h2>
-      <br/>
+      <h4 className="text-center mt-5">Browse Restaurants Here</h4>
       <RestaurantList />
     </div>
   );
