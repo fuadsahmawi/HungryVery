@@ -23,7 +23,6 @@ app.get('/', (request, response) => {
 })
 
 // Add URL to the query functions
-app.get('/q1', db.employeesMorethan10)
 app.get('/monthly-summary', db.monthlyOrdersAndCost)
 app.get('/customer', db.customerList)
 app.post('/customer', db.addCustomer)
@@ -35,6 +34,7 @@ app.get('/review/:rid', db.reviewList)
 app.get('/promotions', db.promotionsList)
 app.post('/rstaff', db.addStaff)
 app.post('/food', db.addFood)
+app.get('/cart/:foodid', db.getFood)
 app.post('/sells', db.assignFood)
 app.put('/food/:foodid', db.updateFood)
 app.get('/hourly-order/:location', db.hourlyOrderSummary)

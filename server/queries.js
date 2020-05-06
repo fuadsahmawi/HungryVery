@@ -11,15 +11,6 @@ const pool = new Pool({
 // List of Customers
 
 // Add sql queries here:
-const employeesMorethan10 = (request, response) => {
-  pool.query('SELECT DISTINCT eid FROM works WHERE hours > 10', (error, results) => {
-    if (error) {
-      throw error
-    }
-    response.status(200).json(results.rows)
-  })
-}
-
 
 const customerList = (request, response) => {
   pool.query('SELECT * FROM Customers', (error, results) => {
@@ -108,6 +99,18 @@ const updateFood = (request, response) => {
   const { foodid } = request.params
   const { fname, category, price, available } = request.body
   pool.query('UPDATE Food SET fname = $1, category = $2, price = $3, available = $4 WHERE foodid = $5', [fname, category, price, available, foodid], (error, results) => {
+    if (error) {
+      throw error
+    }
+    response.status(200).json(results.rows)
+  })
+}
+
+// Get food by foodid
+
+const getFood = (request, response) => {
+  const { foodid } = request.params
+  pool.query('SELECT foodid, fname, category, price, available FROM Food WHERE foodid = $1', [foodid], (error, results) => {
     if (error) {
       throw error
     }
@@ -320,7 +323,6 @@ const monthlySpecificRiderSummary = (request, response) => {
 
 // Add query functions here:
 module.exports = {
-  employeesMorethan10,
   monthlyOrdersAndCost,
   customerList,
   restaurantList,
@@ -331,6 +333,7 @@ module.exports = {
   foodList,
   reviewList,
   addFood,
+  getFood,
   assignFood,
   updateFood,
   hourlyOrderSummary,
