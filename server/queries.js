@@ -106,6 +106,18 @@ const updateFood = (request, response) => {
   })
 }
 
+// Get food by foodid
+
+const getFood = (request, response) => {
+  const { foodid } = request.params
+  pool.query('SELECT foodid, fname, category, price, available FROM Food WHERE foodid = $1', [foodid], (error, results) => {
+    if (error) {
+      throw error
+    }
+    response.status(200).json(results.rows)
+  })
+}
+
 // List of food by a certain Restaurant
 
 const foodList = (request, response) => {
@@ -317,6 +329,7 @@ module.exports = {
   foodList,
   reviewList,
   addFood,
+  getFood,
   assignFood,
   updateFood,
   hourlyOrderSummary,
