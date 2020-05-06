@@ -11,13 +11,14 @@ class MenuItem extends React.Component {
             category : this.props.props.category,
             price : this.props.props.price
         }
-        
-        this.handleChange = props.handleChange.bind(this);
-        this.onClick = this.onClick.bind(this);
+        if (props.handleChange) {
+            this.handleChange = props.handleChange.bind(this);
+            this.onClick = this.onClick.bind(this);
+        }
     }
 
-    onClick(event) {
-        this.handleChange(event.currentTarget, this.state.isSelected);
+    onClick(e) {
+        this.handleChange(this.props.props, this.state.isSelected);
         if (this.state.isSelected) {
             this.setState({isSelected : ''})
         } else {

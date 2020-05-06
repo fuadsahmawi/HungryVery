@@ -2,11 +2,12 @@ import React, { Fragment, useEffect, useState} from "react";
 import DropdownButton from 'react-bootstrap/DropdownButton';
 import Dropdown from 'react-bootstrap/Dropdown';
 import MenuItem from './MenuItem';
+import Cart from './Cart';
 
 const RestaurantList = () => {
   const [restaurant, setRestaurant] = useState([]);
   const [food, setFood] = useState([]);
-  var [list, setList] = useState([]);
+  const [list, setList] = useState([]);
 
   const getRestaurants = async () => {
   	try {
@@ -29,13 +30,14 @@ const RestaurantList = () => {
   }
 
   function handleChange(data, selected) {
+	  var temp = [];
 	if (selected) {
-		//list.splice(list.indexOf(data.firstChild.innerText),1);
-		list = list.filter(row => row.key !== data.firstChild.innerText);
+		temp = list.filter(row => row.foodid !== data.foodid);
 	} else {
-		list.push({key: data.firstChild.innerText, value : data});
+		temp = list;
+		temp.push(data);
 	}
-	setList(list);
+	setList(temp);
   }
 
   useEffect(() => {
@@ -50,28 +52,7 @@ const RestaurantList = () => {
       		))}	
       		</DropdownButton>  
       		<br />
-  			<table>
-    			<thead>
-      				<tr>
-        				<th>ID</th>
-        				<th>Name</th>
-        				<th>Category</th>
-        				<th>Price</th>
-						<th>Quantity</th>
-      				</tr>
-    			</thead>
-    			<tbody>
-					{list
-						// <tr key={index}>
-						// <td>{food.foodid}</td>
-						// <td>{food.fname}</td>
-						// <td>{food.category}</td>
-						// <td>{food.price}</td>
-						// <td><input type='text' defaultValue='Enter Quantity'></input></td>
-						// </tr>
-    				}
-				</tbody>
- 			</table>
+  			<Cart props={list}/>
 			<br/>
   			<table className="table">
     			<thead>
