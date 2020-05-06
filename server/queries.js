@@ -276,11 +276,28 @@ const promotionsSummary = (request, response) => {
 // Monthly-Rider: total number of orders, total hours, total salary
 const monthlyRiderSummary = (request, response) => {
   pool.query(
-    'SELECT R1.riderid, EXTRACT(month FROM O.orderTime) as month, COUNT(distinct orderid) as numberOfOrders ' +
+    'SELECT R1.riderid, EXTRACT(month FROM O.orderTime) as month, COUNT(distinct O.orderid) as numberOfOrders ' +
     'FROM Orders AS O, Riders AS R1, Reviews AS R2 ' +
     'WHERE R1.riderid = O.riderid ' +
     'AND R2.orderid = O.orderid ' +
     'GROUP BY R1.riderid, EXTRACT(month FROM O.orderTime)', (error, results) => {
+      if (error) {
+        throw error
+      }
+      response.status(200).json(results.rows)
+    })
+}
+
+
+const monthlySpecificRiderSummary = (request, response) => {
+  const riderid = parseInt(request.params.riderid)
+  pool.query(
+    'SELECT R1.riderid, EXTRACT(month FROM O.orderTime) as month, COUNT(distinct O.orderid) as numberOfOrders ' +
+    'FROM Orders AS O, Riders AS R1, Reviews AS R2 ' +
+    'WHERE R1.riderid = O.riderid ' +
+    'AND R2.orderid = O.orderid ' +
+    'AND R1.riderid = $1' +
+    'GROUP BY R1.riderid, EXTRACT(month FROM O.orderTime)', [riderid], (error, results) => {
       if (error) {
         throw error
       }
@@ -306,6 +323,7 @@ module.exports = {
   monthlyCustomerOrderAndCost,
   monthlyDeliverySummary,
   monthlyRiderSummary,
+  monthlySpecificRiderSummary,
   monthlyRestaurantSummary,
   promotionsSummary,
   topFiveFoodItems,
