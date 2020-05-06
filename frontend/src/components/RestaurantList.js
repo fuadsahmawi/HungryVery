@@ -6,6 +6,7 @@ const RestaurantList = () => {
   const [restaurant, setRestaurant] = useState([]);
   const [food, setFood] = useState([]);
   const [cart, setCart] = useState([]);
+  const [cartPrice, setCartPrice] = useState([]);
 
   const getRestaurants = async () => {
   	try {
@@ -31,8 +32,14 @@ const RestaurantList = () => {
     try {
       const response = await fetch ("http://localhost:3001/cart/" + id);
       var jsonData = await response.json();
-      const jsonList = jsonData.concat(cart);
+      var jsonList = jsonData.concat(cart);
+      var totalPrice = 0;
+      for (var index = 0; index < jsonList.length; index++) {
+        totalPrice = totalPrice + jsonList[index].price;
+      }
+      const totalPriceJson = [{ totalPrice: totalPrice }];
       setCart(jsonList);
+      setCartPrice(totalPriceJson);
     } catch (err) {
       console.error(err.message);
     }
@@ -40,9 +47,21 @@ const RestaurantList = () => {
 
   const removeFromCart = async (id) => {
     try {
-      var jsonList = cart;
-      jsonList = jsonList.splice(jsonList[id]);
+      const jsonList = cart;
+      for (var index = 0; index < jsonList.length; index++) {
+        if (jsonList[index].foodid === id) {
+          jsonList.splice(index, 1);
+          break;
+        }
+      }
+      var totalPrice = 0;
+      for (index = 0; index < jsonList.length; index++) {
+        totalPrice = totalPrice + jsonList[index].price;
+      }
+      const totalPriceJson = [{ totalPrice: totalPrice }];
       setCart(jsonList);
+      setCartPrice(totalPriceJson);
+      getRestaurants();
     } catch (err) {
       console.error(err.message);
     }
@@ -106,6 +125,25 @@ const RestaurantList = () => {
                 <td><button onClick={() => removeFromCart(cart.foodid)}>Remove</button></td>
               </tr>                  
             ))}
+          </tbody>
+        </table>
+        <br/>
+        <h4 className="text-center mt-5">Confirm Order</h4>
+        <br />
+        <table className="table">
+          <thead>
+              <tr>
+                <th>Total Price</th>
+                <th>Order</th>
+              </tr>
+          </thead>
+          <tbody>
+            {cartPrice.map(cartPrice => (
+              <tr key={cartPrice.totalPrice}>
+                <td>${cartPrice.totalPrice}</td>
+                <td><button>Order</button></td>
+              </tr> 
+            ))}                 
           </tbody>
         </table>
     </Fragment>  				
