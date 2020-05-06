@@ -1,6 +1,7 @@
 import React, { Fragment, useEffect, useState} from "react";
 import DropdownButton from 'react-bootstrap/DropdownButton';
 import Dropdown from 'react-bootstrap/Dropdown';
+import QuantityPicker from './QuantityPicker.js'
 
 const RestaurantList = () => {
   const [restaurant, setRestaurant] = useState([]);
@@ -147,16 +148,18 @@ const RestaurantList = () => {
                 <th>Name</th>
                 <th>Category</th>
                 <th>Price</th>
+                <th>Quantity</th>
                 <th>Remove from Cart</th>
               </tr>
           </thead>
           <tbody>
             {cart.map(cart => (
-              <tr key={cart.foodid}>
+              <tr>
                 <td>{cart.foodid}</td>
                 <td>{cart.fname}</td>
                 <td>{cart.category}</td>  
                 <td>{cart.price}</td>
+                <td><QuantityPicker min={1} max={9}/></td>
                 <td><button onClick={() => removeFromCart(cart.foodid)}>Remove</button></td>
               </tr>                  
             ))}

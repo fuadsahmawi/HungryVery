@@ -17,7 +17,7 @@ const Root = () => {
 			<br />
 			<br />
 			<center>
-			<img src={require('./icon.png')}>
+			<img src={require('./icon.png')} alt="Logo">
 			</img>
 			</center>
 			<div className="text-center mt-5">
