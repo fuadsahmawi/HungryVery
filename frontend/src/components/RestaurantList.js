@@ -1,12 +1,11 @@
 import React, { Fragment, useEffect, useState} from "react";
 import DropdownButton from 'react-bootstrap/DropdownButton';
 import Dropdown from 'react-bootstrap/Dropdown';
-import MenuItem from './MenuItem';
 
 const RestaurantList = () => {
   const [restaurant, setRestaurant] = useState([]);
   const [food, setFood] = useState([]);
-  var [list, setList] = useState([]);
+  const [cart, setCart] = useState([]);
 
   const getRestaurants = async () => {
   	try {
@@ -28,14 +27,25 @@ const RestaurantList = () => {
 	}
   }
 
-  function handleChange(data, selected) {
-	if (selected) {
-		//list.splice(list.indexOf(data.firstChild.innerText),1);
-		list = list.filter(row => row.key !== data.firstChild.innerText);
-	} else {
-		list.push({key: data.firstChild.innerText, value : data});
-	}
-	setList(list);
+  const addToCart = async (id) => {
+    try {
+      const response = await fetch ("http://localhost:3001/cart/" + id);
+      var jsonData = await response.json();
+      const jsonList = jsonData.concat(cart);
+      setCart(jsonList);
+    } catch (err) {
+      console.error(err.message);
+    }
+  }
+
+  const removeFromCart = async (id) => {
+    try {
+      var jsonList = cart;
+      jsonList = jsonList.splice(jsonList[id]);
+      setCart(jsonList);
+    } catch (err) {
+      console.error(err.message);
+    }
   }
 
   useEffect(() => {
@@ -44,34 +54,12 @@ const RestaurantList = () => {
 
 	return (
 		<Fragment>	
-      		<DropdownButton id="dropdown-basic-button" title="Restaurants" onSelect={getFood}>
+      		<DropdownButton className="text-center mt-5" id="dropdown-basic-button" title="Restaurants" onSelect={getFood}>
       			{restaurant.map(restaurant => (
       			<Dropdown.Item key = { restaurant.rid } eventKey={restaurant.rid}>{restaurant.rname}</Dropdown.Item>
       		))}	
       		</DropdownButton>  
       		<br />
-  			<table>
-    			<thead>
-      				<tr>
-        				<th>ID</th>
-        				<th>Name</th>
-        				<th>Category</th>
-        				<th>Price</th>
-						<th>Quantity</th>
-      				</tr>
-    			</thead>
-    			<tbody>
-					{list
-						// <tr key={index}>
-						// <td>{food.foodid}</td>
-						// <td>{food.fname}</td>
-						// <td>{food.category}</td>
-						// <td>{food.price}</td>
-						// <td><input type='text' defaultValue='Enter Quantity'></input></td>
-						// </tr>
-    				}
-				</tbody>
- 			</table>
 			<br/>
   			<table className="table">
     			<thead>
@@ -80,15 +68,47 @@ const RestaurantList = () => {
         				<th>Name</th>
         				<th>Category</th>
         				<th>Price</th>
+                <th>Add to Cart</th>
       				</tr>
     			</thead>
     			<tbody>
-    				{food.map(food =>
-						<MenuItem key={food.foodid} handleChange={handleChange} props={food}/>
-    				)}
-				</tbody>
- 			</table>
-      	</Fragment>  				
+    				{food.map(food => (
+		          <tr key={food.foodid}>
+                <td>{food.foodid}</td>
+                <td>{food.fname}</td>
+                <td>{food.category}</td>  
+                <td>{food.price}</td>
+                <td><button onClick={() => addToCart(food.foodid)}>Add to Cart</button></td>
+              </tr>                  
+    				))}
+				  </tbody>
+ 			  </table>
+      <br / >
+      <h4 className="text-center mt-5">Your Cart</h4>
+      <br />
+        <table className="table">
+          <thead>
+              <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Category</th>
+                <th>Price</th>
+                <th>Remove from Cart</th>
+              </tr>
+          </thead>
+          <tbody>
+            {cart.map(cart => (
+              <tr key={cart.foodid}>
+                <td>{cart.foodid}</td>
+                <td>{cart.fname}</td>
+                <td>{cart.category}</td>  
+                <td>{cart.price}</td>
+                <td><button onClick={() => removeFromCart(cart.foodid)}>Remove</button></td>
+              </tr>                  
+            ))}
+          </tbody>
+        </table>
+    </Fragment>  				
 	)
 }
 
