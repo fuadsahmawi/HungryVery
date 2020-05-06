@@ -24,6 +24,7 @@ const RestaurantList = () => {
   	try {
       getReview(evt);
       setCart([]);
+      setCartPrice([]);
     	const response = await fetch ("http://localhost:3001/food/" + evt);
     	const jsonData = await response.json();
     	setFood(jsonData);
@@ -44,16 +45,22 @@ const RestaurantList = () => {
 
   const addToCart = async (id) => {
     try {
+      for (var index = 0; index < cart.length; index++) {
+        if (id === cart[index].foodid) {
+          alert("Item is already in cart!");
+          return;
+        }
+    }
       const response = await fetch ("http://localhost:3001/cart/" + id);
       var jsonData = await response.json();
-      var jsonList = jsonData.concat(cart);
-      var totalPrice = 0;
-      for (var index = 0; index < jsonList.length; index++) {
-        totalPrice = totalPrice + jsonList[index].price;
+      var item = jsonData[0];
+      if (item.orderlimit - item.amountordered <= 0) {
+        alert("Item is currently out of stock!");
+        return;
       }
-      const totalPriceJson = [{ totalPrice: totalPrice }];
-      setCart(jsonList);
-      setCartPrice(totalPriceJson);
+      item.quantity = 1;
+      var jsonList = jsonData.concat(cart);
+      updateCart(jsonList);
     } catch (err) {
       console.error(err.message);
     }
@@ -68,17 +75,30 @@ const RestaurantList = () => {
           break;
         }
       }
-      var totalPrice = 0;
-      for (index = 0; index < jsonList.length; index++) {
-        totalPrice = totalPrice + jsonList[index].price;
-      }
-      const totalPriceJson = [{ totalPrice: totalPrice }];
-      setCart(jsonList);
-      setCartPrice(totalPriceJson);
       getRestaurants();
+      updateCart(jsonList);
     } catch (err) {
       console.error(err.message);
     }
+  }
+
+  function updateCart (array) {
+    var totalPrice = 0;
+      for (var index = 0; index < array.length; index++) {
+        totalPrice = totalPrice + (array[index].price * array[index].quantity);
+      }
+      const totalPriceJson = [{ totalPrice: totalPrice }];
+      setCart(array);
+      setCartPrice(totalPriceJson);
+  }
+
+  function handleChange(idchange, quantity) {
+    for (var index = 0; index < cart.length; index++) {
+      if (idchange === cart[index].foodid) {
+        cart[index].quantity = quantity;
+      }
+    }
+    updateCart(cart);
   }
 
   useEffect(() => {
@@ -101,6 +121,7 @@ const RestaurantList = () => {
         				<th>ID</th>
         				<th>Name</th>
         				<th>Category</th>
+                <th>Stock</th>
         				<th>Price</th>
                 <th>Add to Cart</th>
       				</tr>
@@ -111,6 +132,7 @@ const RestaurantList = () => {
                 <td>{food.foodid}</td>
                 <td>{food.fname}</td>
                 <td>{food.category}</td>  
+                <td>{food.orderlimit - food.amountordered}</td>  
                 <td>{food.price}</td>
                 <td><button onClick={() => addToCart(food.foodid)}>Add to Cart</button></td>
               </tr>                  
@@ -147,6 +169,7 @@ const RestaurantList = () => {
                 <th>ID</th>
                 <th>Name</th>
                 <th>Category</th>
+                <th>Stock</th>
                 <th>Price</th>
                 <th>Quantity</th>
                 <th>Remove from Cart</th>
@@ -158,8 +181,9 @@ const RestaurantList = () => {
                 <td>{cart.foodid}</td>
                 <td>{cart.fname}</td>
                 <td>{cart.category}</td>  
+                <td>{cart.orderlimit - cart.amountordered}</td> 
                 <td>{cart.price}</td>
-                <td><QuantityPicker min={1} max={9}/></td>
+                <td><QuantityPicker handleChange={handleChange} key= {cart.foodid} id =  {cart.foodid} min={1} max={cart.orderlimit - cart.amountordered}/></td>
                 <td><button onClick={() => removeFromCart(cart.foodid)}>Remove</button></td>
               </tr>                  
             ))}
