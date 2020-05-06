@@ -22,7 +22,7 @@ const RiderSummary = () => {
 
     return (
         <Fragment>
-            <h2>Rider Summary Page</h2>
+            <h4 className="text-center mt-5">Rider Summary Page</h4>
             <form className="d-flex mt-5" onSubmit={getSummary}>
                 <input 
                     type="text" 
@@ -32,7 +32,7 @@ const RiderSummary = () => {
                 </input>
                 <button className="btn btn-success">Submit</button>
             </form>
-            <h2>Rider Monthly Summary Table</h2>
+            <h4 className="text-center mt-5">Rider Monthly Performance Table</h4>
             <table class="table">
                 <thead>
                     <tr>

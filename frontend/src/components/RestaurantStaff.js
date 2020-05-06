@@ -58,14 +58,14 @@ const RestaurantStaff = () => {
 
     return (
         <Fragment>
-            <h2>Restaurant Staff Page</h2>
-            <DropdownButton id="dropdown-basic-button" title="Restaurants" onSelect={getData}>
+            <h4 className="text-center mt-5">Restaurant Staff Page</h4>
+            <DropdownButton className="text-center mt-5" id="dropdown-basic-button" title="Restaurants" onSelect={getData}>
                 {restaurant.map(restaurant => (
                     <Dropdown.Item key={restaurant.rid} eventKey={restaurant.rid}>{restaurant.rname}</Dropdown.Item>
                 ))}
             </DropdownButton>
             <br />
-            <h2>Staff Summary Table</h2>
+            <h4 className="text-center mt-5">Staff Summary Table</h4>
             <table class="table">
                 <thead>
                     <tr>
@@ -85,7 +85,7 @@ const RestaurantStaff = () => {
                 </tbody>
             </table>
             <br />
-            <h2>Top-Five items for restaurant</h2>
+            <h4 className="text-center mt-5">Top-Five items for restaurant</h4>
             <table class="table">
                 <thead>
                     <tr>
@@ -103,7 +103,7 @@ const RestaurantStaff = () => {
                 </tbody>
             </table>
             <br />
-            <h2>Promotion Summary Table</h2>
+            <h4 className="text-center mt-5">Promotion Summary Table</h4>
             <table class="table">
                 <thead>
                     <tr>
