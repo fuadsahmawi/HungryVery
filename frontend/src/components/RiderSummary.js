@@ -28,6 +28,7 @@ const RiderSummary = () => {
                     type="text" 
                     className="form-control" 
                     value={riderid} 
+                    placeholder="Type Rider ID here"
                     onChange={e => setRider(e.target.value)}>
                 </input>
                 <button className="btn btn-success">Submit</button>
@@ -38,9 +39,8 @@ const RiderSummary = () => {
                     <tr>
                         <th>Month</th>
                         <th>Number Of Orders Delivered</th>
-                        {/* <th>Average Delivery Time</th>
-                        <th>Number of ratings over all orders</th>
-                        <th>Average Rating</th> */}
+                        <th>Total Delivery Fees</th>
+                        <th>Average Delivery Time</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -48,6 +48,8 @@ const RiderSummary = () => {
                         <tr>
                             <td>{summary.month}</td>
                             <td>{summary.numberoforders}</td>
+                            <td>{summary.totaldeliveryfees}</td>
+                            <td>{summary.averagedeliverytime}</td>
                         </tr>
                     ))}
                 </tbody>
