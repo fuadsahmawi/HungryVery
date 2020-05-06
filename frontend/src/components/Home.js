@@ -12,7 +12,7 @@ const Home = () => {
 					text: 'Welcome to HungryVery',
 					imageAnimation: 'slideInLeft',
 					textAnimation: 'slideInUp',
-					backgroundColor: '#386CE4',
+					backgroundColor: '#FFFFFF',
 					textColor: '#002134'
 				}
 				]}
