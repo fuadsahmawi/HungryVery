@@ -5,6 +5,7 @@ import Dropdown from 'react-bootstrap/Dropdown';
 const RestaurantList = () => {
   const [restaurant, setRestaurant] = useState([]);
   const [food, setFood] = useState([]);
+  const [review, setReview] = useState([]);
   const [cart, setCart] = useState([]);
   const [cartPrice, setCartPrice] = useState([]);
 
@@ -20,12 +21,24 @@ const RestaurantList = () => {
 
   const getFood = async (evt) => {
   	try {
+      getReview(evt);
+      setCart([]);
     	const response = await fetch ("http://localhost:3001/food/" + evt);
     	const jsonData = await response.json();
     	setFood(jsonData);
-	} catch (err) {
+	  } catch (err) {
 		console.error(err.message);
-	}
+	  }
+  }
+
+  const getReview = async (evt) => {
+    try {
+      const response = await fetch ("http://localhost:3001/review/" + evt);
+      const jsonData = await response.json();
+      setReview(jsonData);
+    } catch (err) {
+    console.error(err.message);
+    }
   }
 
   const addToCart = async (id) => {
@@ -77,9 +90,10 @@ const RestaurantList = () => {
       			{restaurant.map(restaurant => (
       			<Dropdown.Item key = { restaurant.rid } eventKey={restaurant.rid}>{restaurant.rname}</Dropdown.Item>
       		))}	
-      		</DropdownButton>  
-      		<br />
+      		</DropdownButton>   
 			<br/>
+      <h4 className="text-center mt-5">Menu</h4>
+      <br/>
   			<table className="table">
     			<thead>
       				<tr>
@@ -102,7 +116,28 @@ const RestaurantList = () => {
     				))}
 				  </tbody>
  			  </table>
-      <br / >
+        <h4 className="text-center mt-5">Reviews</h4>
+        <br/>
+        <table className="table">
+          <thead>
+              <tr>
+                <th>ID</th>
+                <th>Rating</th>
+                <th>Review</th>
+                <th>Customer</th>
+              </tr>
+          </thead>
+          <tbody>
+            {review.map(review => (
+              <tr key={review.reviewid}>
+                <td>{review.reviewid}</td>
+                <td>{review.foodrating}</td>
+                <td>{review.foodreview}</td>  
+                <td>{review.cname}</td> 
+              </tr>                  
+            ))}
+          </tbody>
+        </table>
       <h4 className="text-center mt-5">Your Cart</h4>
       <br />
         <table className="table">
@@ -127,7 +162,6 @@ const RestaurantList = () => {
             ))}
           </tbody>
         </table>
-        <br/>
         <h4 className="text-center mt-5">Confirm Order</h4>
         <br />
         <table className="table">
