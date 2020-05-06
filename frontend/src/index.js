@@ -5,7 +5,7 @@ import './index.css';
 import * as serviceWorker from './serviceWorker';
 import { BrowserRouter } from "react-router-dom";
 
-import Root from './components/Root';
+import Root from './components/Root.js';
 
 //ReactDOM.render(<RestaurantSwitcher/>,document.getElementById('restaurant'));
 ReactDOM.render(
