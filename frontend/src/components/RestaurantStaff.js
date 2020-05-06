@@ -78,8 +78,8 @@ const RestaurantStaff = () => {
                     {summary.map(summary => (
                         <tr>
                             <td>{summary.month}</td>
-                            <td>{summary.numOrders}</td>
-                            <td>{summary.totalCost}</td>
+                            <td>{summary.numorders}</td>
+                            <td>{summary.totalcost}</td>
                         </tr>
                     ))}
                 </tbody>
@@ -118,8 +118,8 @@ const RestaurantStaff = () => {
                         <tr>
                             <td>{promos.promoid}</td>
                             <td>{promos.pname}</td>
-                            <td>{promos.hoursDuration}</td>
-                            <td>{promos.numberOfOrders}</td>
+                            <td>{promos.hoursduration}</td>
+                            <td>{promos.numberoforders}</td>
                         </tr>
                     ))}
                 </tbody>

@@ -68,7 +68,7 @@ const FDSManager = () => {
             <table class="table">
                 <thead>
                     <tr>
-                        <th>New Customers</th>
+                        <th>Month</th>
                         <th>Total Number of orders</th>
                         <th>Total Cost of all orders</th>
                     </tr>
@@ -77,8 +77,8 @@ const FDSManager = () => {
                     {monthlyOrdersAndCost.map(monthlyOrdersAndCost => (
                         <tr>
                             <td>{monthlyOrdersAndCost.month}</td>
-                            <td>{monthlyOrdersAndCost.totalOrders}</td>
-                            <td>{monthlyOrdersAndCost.totalCost}</td>
+                            <td>{monthlyOrdersAndCost.totalorders}</td>
+                            <td>{monthlyOrdersAndCost.totalcost}</td>
                         </tr>
                     ))}
                 </tbody>

@@ -1,18 +1,13 @@
 import React, { Fragment, useEffect, useState } from "react";
 
-/*
-    TODO: Get the specific rider information
-*/
-
 const RiderSummary = () => {
     const [riderid, setRider] = useState("");
     const [summary, setSummary] = useState([]);
 
     const getSummary = async (evt) => {
         evt.preventDefault();
-        console.log(riderid);
         try {
-            const response = await fetch("http://localhost:3001/monthly-rider/") + riderid;
+            const response = await fetch("http://localhost:3001/monthly-rider/"+riderid);
             const jsonData = await response.json();
             setSummary(jsonData);
         } catch (err) {
@@ -52,7 +47,7 @@ const RiderSummary = () => {
                     {summary.map(summary => (
                         <tr>
                             <td>{summary.month}</td>
-                            <td>{summary.numOrders}</td>
+                            <td>{summary.numberoforders}</td>
                         </tr>
                     ))}
                 </tbody>
