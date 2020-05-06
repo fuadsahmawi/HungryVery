@@ -204,16 +204,30 @@ const monthlyCustomerOrderAndCost = (request, response) => {
     })
 }
 
-// Hour-Delivery Location: total number of orders at that hour for that location
+// // Hour-Delivery Location: total number of orders at that hour for that location
+// const hourlyOrderSummary = (request, response) => {
+//   const location = String(request.params.location)
+//   pool.query('SELECT EXTRACT(hour FROM orderTime) as orderHour, COUNT(*) as numberOfOrders FROM Orders GROUP BY EXTRACT(hour FROM orderTime) WHERE dlocation = $1', [location], (error, results) => {
+//     if (error) {
+//       throw error
+//     }
+//     response.status(200).json(results.rows)
+//   })
+// }
+// district-hour-totalorder: total number of orders in that district by hours
 const hourlyOrderSummary = (request, response) => {
-  const location = String(request.params.location)
-  pool.query('SELECT EXTRACT(hour FROM orderTime) as orderHour, COUNT(*) as numberOfOrders FROM Orders GROUP BY EXTRACT(hour FROM orderTime) WHERE dlocation = $1', [location], (error, results) => {
-    if (error) {
-      throw error
-    }
-    response.status(200).json(results.rows)
-  })
-}
+    const location = String(request.params.location)
+    pool.query(
+      "select district, EXTRACT(hour FROM orderTime) as hour, count(orderid) as totalorders from orders JOIN "+ 
+      "postaldistrict ON left(postalcode,2) = sector group by district, EXTRACT(hour FROM orderTime) order by district", 
+      (error, results) => {
+      if (error) {
+        throw error
+      }
+      response.status(200).json(results.rows)
+    })
+  }
+
 
 // Rider-Month: total number of orders delivered, avg delivery time, 
 //              number of ratings for all orders, avg rating

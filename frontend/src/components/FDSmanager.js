@@ -26,7 +26,7 @@ const FDSManager = () => {
 
     const getHourlyOrderSummary = async (evt) => {
         try {
-            const response = await fetch("http://localhost:3001/hourly-order/" + evt);
+            const response = await fetch("http://localhost:3001/hourly-order");
             const jsonData = await response.json();
             setHourlyOrderSummary(jsonData);
         } catch (err) {
@@ -34,15 +34,15 @@ const FDSManager = () => {
         }
     }
 
-    const getLocations = async (evt) => {
-        try {
-            const response = await fetch("http://localhost:3001/locations");
-            const jsonData = await response.json();
-            setLocations(jsonData);
-        } catch (err) {
-            console.error(err.message);
-        }
-    }
+    // const getLocations = async (evt) => {
+    //     try {
+    //         const response = await fetch("http://localhost:3001/locations");
+    //         const jsonData = await response.json();
+    //         setLocations(jsonData);
+    //     } catch (err) {
+    //         console.error(err.message);
+    //     }
+    // }
 
     const getMonthlyDeliverySummary = async (evt) => {
         try {
@@ -56,8 +56,8 @@ const FDSManager = () => {
 
     useEffect(() => {
         getMonthlyOrdersAndCost();
-        getLocations();
         getMonthlyDeliverySummary();
+        getHourlyOrderSummary();
     }, []);
 
     return (
@@ -79,6 +79,26 @@ const FDSManager = () => {
                             <td>{monthlyOrdersAndCost.month}</td>
                             <td>{monthlyOrdersAndCost.totalorders}</td>
                             <td>{monthlyOrdersAndCost.totalcost}</td>
+                        </tr>
+                    ))}
+                </tbody>
+            </table>
+            <br />
+            <h4 className="text-center mt-5">District per hour Order Summary</h4>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>District</th>
+                        <th>Hour</th>
+                        <th>Total Orders</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {hourlyOrderSummary.map(hourlyOrderSummary => (
+                        <tr>
+                            <td>{hourlyOrderSummary.district}</td>
+                            <td>{hourlyOrderSummary.hour}</td>
+                            <td>{hourlyOrderSummary.totalorders}</td>
                         </tr>
                     ))}
                 </tbody>
