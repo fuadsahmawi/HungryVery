@@ -72,8 +72,8 @@ const restaurantList = (request, response) => {
 // Add new food
 
 const addFood = (request, response) => {
-  const { fname, category, price, available } = request.body
-  pool.query('INSERT INTO Food(fname, category, price, available) VALUES ($1, $2, $3, $4) RETURNING *', [fname, category, price, available], (error, results) => {
+  const { fname, category, amountOrdered, orderLimit, price} = request.body
+  pool.query('INSERT INTO Food(fname, category, amountOrdered, orderLimit, price) VALUES ($1, $2, $3, $4, $5) RETURNING *', [fname, category, amountOrdered, orderLimit, price], (error, results) => {
     if (error) {
       throw error
     }
@@ -97,8 +97,8 @@ const assignFood = (request, response) => {
 
 const updateFood = (request, response) => {
   const { foodid } = request.params
-  const { fname, category, price, available } = request.body
-  pool.query('UPDATE Food SET fname = $1, category = $2, price = $3, available = $4 WHERE foodid = $5', [fname, category, price, available, foodid], (error, results) => {
+  const { fname, category, amountOrdered, orderLimit, price} = request.body
+  pool.query('UPDATE Food SET fname = $1, category = $2, amountOrdered = $3, orderLimit = $4, price = $5, WHERE foodid = $6', [fname, category, amountOrdered, orderLimit, price, foodid], (error, results) => {
     if (error) {
       throw error
     }
@@ -110,7 +110,7 @@ const updateFood = (request, response) => {
 
 const getFood = (request, response) => {
   const { foodid } = request.params
-  pool.query('SELECT foodid, fname, category, price, available FROM Food WHERE foodid = $1', [foodid], (error, results) => {
+  pool.query('SELECT foodid, fname, category, amountOrdered, orderLimit, price FROM Food WHERE foodid = $1', [foodid], (error, results) => {
     if (error) {
       throw error
     }
@@ -122,7 +122,7 @@ const getFood = (request, response) => {
 
 const foodList = (request, response) => {
   const { rid } = request.params
-  pool.query('SELECT foodid, fname, category, price, available FROM Sells natural join Food WHERE rid = $1', [rid], (error, results) => {
+  pool.query('SELECT foodid, fname, category, amountOrdered, orderLimit, price FROM Sells natural join Food WHERE rid = $1', [rid], (error, results) => {
     if (error) {
       throw error
     }
