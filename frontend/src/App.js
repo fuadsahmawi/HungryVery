@@ -2,6 +2,9 @@ import React from 'react';
 
 // Components
 import RestaurantList from './components/RestaurantList';
+import RestaurantStaff from './components/RestaurantStaff';
+import RiderSummary from './components/RiderSummary';
+import FDSManager from './components/FDSmanager';
 
 function App(){
   // function deleteMerchant() {

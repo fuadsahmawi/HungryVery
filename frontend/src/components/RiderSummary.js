@@ -10,13 +10,9 @@ const RiderSummary = () => {
 
     const getSummary = async (evt) => {
         evt.preventDefault();
+        console.log(riderid);
         try {
-            const body = {riderid};
-            const response = await fetch("http://localhost:3001/rider/", {
-                method:"POST",
-                headers: {"Content-Type": "application/json"},
-                body: JSON.stringify(body)
-            });
+            const response = await fetch("http://localhost:3001/monthly-rider/") + riderid;
             const jsonData = await response.json();
             setSummary(jsonData);
         } catch (err) {
@@ -47,9 +43,9 @@ const RiderSummary = () => {
                     <tr>
                         <th>Month</th>
                         <th>Number Of Orders Delivered</th>
-                        <th>Average Delivery Time</th>
+                        {/* <th>Average Delivery Time</th>
                         <th>Number of ratings over all orders</th>
-                        <th>Average Rating</th>
+                        <th>Average Rating</th> */}
                     </tr>
                 </thead>
                 <tbody>
@@ -57,7 +53,6 @@ const RiderSummary = () => {
                         <tr>
                             <td>{summary.month}</td>
                             <td>{summary.numOrders}</td>
-                            <td>{summary.totalCostOfOrders}</td>
                         </tr>
                     ))}
                 </tbody>
