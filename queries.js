@@ -2,8 +2,8 @@ const Pool = require('pg').Pool
 const pool = new Pool({
   user: 'postgres',
   host: 'localhost',
-  database: 'postgres',
-  password: '',
+  database: 'test_init2',
+  password: '9519',
   port: 5432,
 })
 // TODO: SQL Queries
@@ -247,7 +247,8 @@ const monthlyRestaurantSummary = (request, response) => {
 const topFiveFoodItems = (request, response) => {
   const rid = parseInt(request.params.rid)
   pool.query('SELECT X.rid, X.foodid, X.numOrders ' +
-    'FROM (SELECT O.rid, M.foodid, COUNT(*) AS numOrders FROM Makes AS M, Orders as O WHERE M.orderid = O.orderid GROUP BY O.rid, M.foodid) AS X ' +
+    'FROM (SELECT O.rid, M.foodid, COUNT(*) AS numOrders FROM Makes AS M, Orders as O ' +
+    'WHERE M.orderid = O.orderid GROUP BY O.rid, M.foodid) AS X ' +
     'WHERE X.rid = $1 ORDER BY X.numOrders DESC LIMIT 5', [rid], (error, results) => {
       if (error) {
         throw error
@@ -282,10 +283,11 @@ const promotionsSummary = (request, response) => {
 // Weekly-Rider: total number of orders, total hours, total salary
 
 
-// Monthly-Rider: total number of orders, total hours, total salary
+// Monthly-Rider: total number of orders, total hours, total salary, average delivery time 
 const monthlyRiderSummary = (request, response) => {
   pool.query(
     'SELECT R1.riderid, EXTRACT(month FROM O.orderTime) as month, COUNT(distinct O.orderid) as numberOfOrders ' +
+    'SUM(O.deliveryfee) as totalDeliveryFees, AVG((EXTRACT(EPOCH FROM (O.deliverytime-O.arrivaltime))/216000)) as averageDeliveryTime ' +
     'FROM Orders AS O, Riders AS R1, Reviews AS R2 ' +
     'WHERE R1.riderid = O.riderid ' +
     'AND R2.orderid = O.orderid ' +
@@ -301,7 +303,9 @@ const monthlyRiderSummary = (request, response) => {
 const monthlySpecificRiderSummary = (request, response) => {
   const riderid = parseInt(request.params.riderid)
   pool.query(
-    'SELECT R1.riderid, EXTRACT(month FROM O.orderTime) as month, COUNT(distinct O.orderid) as numberOfOrders ' +
+    'SELECT R1.riderid, EXTRACT(month FROM O.orderTime) as month, COUNT(distinct O.orderid) as numberOfOrders, ' +
+    // 'COALESCE((EXTRACT(EPOCH FROM (arrivaltime-assigntime))/3600), (EXTRACT(EPOCH FROM (NOW()-assigntime))/3600)) as hoursDuration, ' +
+    'SUM(O.deliveryfee) as totalDeliveryFees, AVG((EXTRACT(EPOCH FROM (O.deliverytime-O.arrivaltime))/216000)) as averageDeliveryTime ' +
     'FROM Orders AS O, Riders AS R1, Reviews AS R2 ' +
     'WHERE R1.riderid = O.riderid ' +
     'AND R2.orderid = O.orderid ' +
