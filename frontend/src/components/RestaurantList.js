@@ -9,6 +9,7 @@ const RestaurantList = () => {
   const [review, setReview] = useState([]);
   const [cart, setCart] = useState([]);
   const [cartPrice, setCartPrice] = useState([]);
+  const [view, setView] = useState('');
 
   const getRestaurants = async () => {
   	try {
@@ -25,6 +26,7 @@ const RestaurantList = () => {
       getReview(evt);
       setCart([]);
       setCartPrice([]);
+      setView(0);
     	const response = await fetch ("http://localhost:3001/food/" + evt);
     	const jsonData = await response.json();
     	setFood(jsonData);
@@ -105,108 +107,131 @@ const RestaurantList = () => {
     getRestaurants();
   }, []);
 
+  var menuFrag = (view === 0) ? <div>
+  <h4 className="text-center mt-5">Menu</h4>
+  <br/>
+    <table className="table">
+      <thead>
+          <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Category</th>
+            <th>Stock</th>
+            <th>Price</th>
+            <th>Add to Cart</th>
+          </tr>
+      </thead>
+      <tbody>
+        {food.map(food => (
+          <tr key={food.foodid}>
+            <td>{food.foodid}</td>
+            <td>{food.fname}</td>
+            <td>{food.category}</td>  
+            <td>{food.orderlimit - food.amountordered}</td>  
+            <td>{food.price}</td>
+            <td><button onClick={() => addToCart(food.foodid)}>Add to Cart</button></td>
+          </tr>                  
+        ))}
+      </tbody>
+     </table>
+    </div>
+    :
+    <div/>
+
+  var reviewFrag = (view === 1) ? <div>
+  <h4 className="text-center mt-5">Reviews</h4>
+  <br/>
+  <table className="table">
+    <thead>
+        <tr>
+          <th>ID</th>
+          <th>Rating</th>
+          <th>Review</th>
+          <th>Customer</th>
+        </tr>
+    </thead>
+    <tbody>
+      {review.map(review => (
+        <tr key={review.reviewid}>
+          <td>{review.reviewid}</td>
+          <td>{review.foodrating}</td>
+          <td>{review.foodreview}</td>  
+          <td>{review.cname}</td> 
+        </tr>                  
+      ))}
+    </tbody>
+  </table>
+  </div>
+  :
+  <div/>
+
+  var cartFrag = (view === 2) ?
+  <div>
+  <h4 className="text-center mt-5">Your Cart</h4>
+  <br />
+    <table className="table">
+      <thead>
+          <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Category</th>
+            <th>Stock</th>
+            <th>Price</th>
+            <th>Quantity</th>
+            <th>Remove from Cart</th>
+          </tr>
+      </thead>
+      <tbody>
+        {cart.map(cart => (
+          <tr>
+            <td>{cart.foodid}</td>
+            <td>{cart.fname}</td>
+            <td>{cart.category}</td>  
+            <td>{cart.orderlimit - cart.amountordered}</td> 
+            <td>{cart.price}</td>
+            <td><QuantityPicker handleChange={handleChange} key= {cart.foodid} id =  {cart.foodid} min={1} max={cart.orderlimit - cart.amountordered}/></td>
+            <td><button onClick={() => removeFromCart(cart.foodid)}>Remove</button></td>
+          </tr>                  
+        ))}
+      </tbody>
+    </table>
+    <h4 className="text-center mt-5">Confirm Order</h4>
+    <br />
+    <table className="table">
+      <thead>
+          <tr>
+            <th>Total Price</th>
+            <th>Order</th>
+          </tr>
+      </thead>
+      <tbody>
+        {cartPrice.map(cartPrice => (
+          <tr key={cartPrice.totalPrice}>
+            <td>${cartPrice.totalPrice}</td>
+            <td><button>Order</button></td>
+          </tr> 
+        ))}                 
+      </tbody>
+    </table>
+    </div>
+    :
+    <div/>
+
 	return (
 		<Fragment>	
       		<DropdownButton className="text-center mt-5" id="dropdown-basic-button" title="Restaurants" onSelect={getFood}>
       			{restaurant.map(restaurant => (
       			<Dropdown.Item key = { restaurant.rid } eventKey={restaurant.rid}>{restaurant.rname}</Dropdown.Item>
       		))}	
-      		</DropdownButton>   
+      		</DropdownButton>
+          <button onClick={() => setView(0)}>Menu</button>
+          <button onClick={() => setView(1)}>Reviews</button>
+          <button onClick={() => setView(2)}>Cart</button>
+          
 			<br/>
-      <h4 className="text-center mt-5">Menu</h4>
-      <br/>
-  			<table className="table">
-    			<thead>
-      				<tr>
-        				<th>ID</th>
-        				<th>Name</th>
-        				<th>Category</th>
-                <th>Stock</th>
-        				<th>Price</th>
-                <th>Add to Cart</th>
-      				</tr>
-    			</thead>
-    			<tbody>
-    				{food.map(food => (
-		          <tr key={food.foodid}>
-                <td>{food.foodid}</td>
-                <td>{food.fname}</td>
-                <td>{food.category}</td>  
-                <td>{food.orderlimit - food.amountordered}</td>  
-                <td>{food.price}</td>
-                <td><button onClick={() => addToCart(food.foodid)}>Add to Cart</button></td>
-              </tr>                  
-    				))}
-				  </tbody>
- 			  </table>
-        <h4 className="text-center mt-5">Reviews</h4>
-        <br/>
-        <table className="table">
-          <thead>
-              <tr>
-                <th>ID</th>
-                <th>Rating</th>
-                <th>Review</th>
-                <th>Customer</th>
-              </tr>
-          </thead>
-          <tbody>
-            {review.map(review => (
-              <tr key={review.reviewid}>
-                <td>{review.reviewid}</td>
-                <td>{review.foodrating}</td>
-                <td>{review.foodreview}</td>  
-                <td>{review.cname}</td> 
-              </tr>                  
-            ))}
-          </tbody>
-        </table>
-      <h4 className="text-center mt-5">Your Cart</h4>
-      <br />
-        <table className="table">
-          <thead>
-              <tr>
-                <th>ID</th>
-                <th>Name</th>
-                <th>Category</th>
-                <th>Stock</th>
-                <th>Price</th>
-                <th>Quantity</th>
-                <th>Remove from Cart</th>
-              </tr>
-          </thead>
-          <tbody>
-            {cart.map(cart => (
-              <tr>
-                <td>{cart.foodid}</td>
-                <td>{cart.fname}</td>
-                <td>{cart.category}</td>  
-                <td>{cart.orderlimit - cart.amountordered}</td> 
-                <td>{cart.price}</td>
-                <td><QuantityPicker handleChange={handleChange} key= {cart.foodid} id =  {cart.foodid} min={1} max={cart.orderlimit - cart.amountordered}/></td>
-                <td><button onClick={() => removeFromCart(cart.foodid)}>Remove</button></td>
-              </tr>                  
-            ))}
-          </tbody>
-        </table>
-        <h4 className="text-center mt-5">Confirm Order</h4>
-        <br />
-        <table className="table">
-          <thead>
-              <tr>
-                <th>Total Price</th>
-                <th>Order</th>
-              </tr>
-          </thead>
-          <tbody>
-            {cartPrice.map(cartPrice => (
-              <tr key={cartPrice.totalPrice}>
-                <td>${cartPrice.totalPrice}</td>
-                <td><button>Order</button></td>
-              </tr> 
-            ))}                 
-          </tbody>
-        </table>
+      {menuFrag}
+      {reviewFrag}
+      {cartFrag}
     </Fragment>  				
 	)
 }
