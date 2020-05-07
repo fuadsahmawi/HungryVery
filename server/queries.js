@@ -2,8 +2,8 @@ const Pool = require('pg').Pool
 const pool = new Pool({
   user: 'postgres',
   host: 'localhost',
-  database: 'test_init2',
-  password: '9519',
+  database: 'postgres',
+  password: '',
   port: 5432,
 })
 // TODO: SQL Queries
@@ -60,11 +60,12 @@ const updateCustomer = (request, response) => {
 
 // Delete customer
 
-const deleteCustomer = (request, response) => {
+const deleteCustomer = (request, response,next) => {
   const { cid } = request.params
   pool.query('DELETE FROM Customers WHERE cid = $1', [cid], (error, results) => {
     if (error) {
-      throw error
+      next(error)
+      return
     }
     response.status(200).json(results.rows)
   })
@@ -130,11 +131,12 @@ const restaurantList = (request, response) => {
 
 // Add new food
 
-const addFood = (request, response) => {
+const addFood = (request, response,next) => {
   const { fname, category, amountOrdered, orderLimit, price } = request.body
   pool.query('INSERT INTO Food(fname, category, amountOrdered, orderLimit, price) VALUES ($1, $2, $3, $4, $5) RETURNING *', [fname, category, amountOrdered, orderLimit, price], (error, results) => {
     if (error) {
-      throw error
+      next(error)
+      return
     }
     response.status(200).json(results.rows)
   })
@@ -154,12 +156,13 @@ const assignFood = (request, response) => {
 
 // Update details of Food
 
-const updateFood = (request, response) => {
+const updateFood = (request, response, next) => {
   const { foodid } = request.params
   const { fname, category, amountOrdered, orderLimit, price } = request.body
   pool.query('UPDATE Food SET fname = $1, category = $2, amountOrdered = $3, orderLimit = $4, price = $5, WHERE foodid = $6', [fname, category, amountOrdered, orderLimit, price, foodid], (error, results) => {
     if (error) {
-      throw error
+      next(error)
+      return
     }
     response.status(200).json(results.rows)
   })
@@ -238,11 +241,12 @@ const updateStaff = (request, response) => {
 }
 // Add new promotion staff
 
-const addPromotion = (request, response) => {
+const addPromotion = (request, response,next) => {
   const { pname, discount, startdate, enddate } = request.body
   pool.query('INSERT INTO Promotions(pname,discount,StartDateTime,EndDateTime) VALUES ($1, $2, $3, $4) RETURNING *', [pname, discount, startdate, enddate], (error, results) => {
     if (error) {
-      throw error
+      next(error)
+      return
     }
     response.status(200).json(results.rows)
   })
