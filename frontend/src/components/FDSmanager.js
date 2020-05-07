@@ -13,6 +13,34 @@ const FDSManager = () => {
     const [hourlyOrderSummary, setHourlyOrderSummary] = useState([]);
     const [monthlyDeliverySummary, setMonthlyDeliverySummary] = useState([]);
 
+    // const [ftid, setftid] = useState('');
+    // const [ptid, setptid] = useState('');
+    
+    // const deleteFT = async (e) => {
+    //     e.preventDefault();
+    //     try {
+    //         const response = await fetch("http://localhost:3001/riderft/" + ftid ,{
+    //             method: "DELETE"
+    //         });
+    //         console.log(response);
+    //     } catch (err) {
+    //         console.error(err.message);
+    //     }
+    // };
+
+    // const deletePT = async (e) => {
+    //     e.preventDefault();
+    //     try {
+    //         const response = await fetch("http://localhost:3001/riderpt/" + ptid ,{
+    //             method: "DELETE"
+    //         });
+    //         console.log(response);
+    //     } catch (err) {
+    //         console.error(err.message);
+    //     }
+    // };
+    
+
     const getMonthlyOrdersAndCost = async () => {
         try {
             const response = await fetch("http://localhost:3001/monthly-summary");
@@ -63,6 +91,28 @@ const FDSManager = () => {
         <Fragment>
             <h4 className="text-center mt-5">FDS Manager Page</h4>
             <br />
+            {/* <h4 className="text-center mt-5">Delete Full Time Rider</h4>
+            <form className="d-flex mt-5" onSubmit={deleteFT}>
+                <input 
+                    type="text" 
+                    className="form-control" 
+                    value={ftid} 
+                    placeholder="Full time rider ID"
+                    onChange={e => setftid(e.target.value)}>
+                </input>
+                <button className="btn btn-success">Delete Fulltimer</button>
+            </form>
+            <h4 className="text-center mt-5">Delete Part Time Rider</h4>
+            <form className="d-flex mt-5" onSubmit={deletePT}>
+                <input 
+                    type="text" 
+                    className="form-control" 
+                    value={ptid} 
+                    placeholder="Part time rider ID"
+                    onChange={e => setptid(e.target.value)}>
+                </input>
+                <button className="btn btn-success">Delete Parttimer</button>
+            </form> */}
             <h4 className="text-center mt-5">Monthly Order Summary</h4>
             <table class="table">
                 <thead>
