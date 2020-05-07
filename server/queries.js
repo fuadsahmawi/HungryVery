@@ -2,8 +2,8 @@ const Pool = require('pg').Pool
 const pool = new Pool({
   user: 'postgres',
   host: 'localhost',
-  database: 'postgres',
-  password: '',
+  database: 'test_init2',
+  password: '9519',
   port: 5432,
 })
 // TODO: SQL Queries
@@ -62,7 +62,7 @@ const deleteCustomer = (request, response) => {
 
 const addRider = (request, response) => {
   const { rname, vnumber, mid } = request.body
-  pool.query('INSERT INTO riders(ridername, vnumber,mid) VALUES ($1, $2) RETURNING *', [rname, vnumber,mid], (error, results) => {
+  pool.query('INSERT INTO riders(ridername, vnumber,mid) VALUES ($1, $2) RETURNING *', [rname, vnumber, mid], (error, results) => {
     if (error) {
       throw error
     }
@@ -119,7 +119,7 @@ const restaurantList = (request, response) => {
 // Add new food
 
 const addFood = (request, response) => {
-  const { fname, category, amountOrdered, orderLimit, price} = request.body
+  const { fname, category, amountOrdered, orderLimit, price } = request.body
   pool.query('INSERT INTO Food(fname, category, amountOrdered, orderLimit, price) VALUES ($1, $2, $3, $4, $5) RETURNING *', [fname, category, amountOrdered, orderLimit, price], (error, results) => {
     if (error) {
       throw error
@@ -144,7 +144,7 @@ const assignFood = (request, response) => {
 
 const updateFood = (request, response) => {
   const { foodid } = request.params
-  const { fname, category, amountOrdered, orderLimit, price} = request.body
+  const { fname, category, amountOrdered, orderLimit, price } = request.body
   pool.query('UPDATE Food SET fname = $1, category = $2, amountOrdered = $3, orderLimit = $4, price = $5, WHERE foodid = $6', [fname, category, amountOrdered, orderLimit, price, foodid], (error, results) => {
     if (error) {
       throw error
@@ -263,17 +263,17 @@ const monthlyCustomerOrderAndCost = (request, response) => {
 // }
 // district-hour-totalorder: total number of orders in that district by hours
 const hourlyOrderSummary = (request, response) => {
-    const location = String(request.params.location)
-    pool.query(
-      "select district, EXTRACT(hour FROM orderTime) as hour, count(orderid) as totalorders from orders JOIN "+ 
-      "postaldistrict ON left(postalcode,2) = sector group by district, EXTRACT(hour FROM orderTime) order by district", 
-      (error, results) => {
+  const location = String(request.params.location)
+  pool.query(
+    "select district, EXTRACT(hour FROM orderTime) as hour, count(orderid) as totalorders from orders JOIN " +
+    "postaldistrict ON left(postalcode,2) = sector group by district, EXTRACT(hour FROM orderTime) order by district",
+    (error, results) => {
       if (error) {
         throw error
       }
       response.status(200).json(results.rows)
     })
-  }
+}
 
 
 // Rider-Month: total number of orders delivered, avg delivery time, 
@@ -311,7 +311,7 @@ const monthlyRestaurantSummary = (request, response) => {
 const topFiveFoodItems = (request, response) => {
   const rid = parseInt(request.params.rid)
   pool.query('SELECT X.rid, X.foodid, X.numOrders ' +
-    'FROM (SELECT O.rid, M.foodid, COUNT(*) AS numOrders FROM Makes AS M, Orders as O ' +
+    'FROM (SELECT O.rid, M.foodid, SUM(M.amount) AS numOrders FROM Makes AS M, Orders as O ' +
     'WHERE M.orderid = O.orderid GROUP BY O.rid, M.foodid) AS X ' +
     'WHERE X.rid = $1 ORDER BY X.numOrders DESC LIMIT 5', [rid], (error, results) => {
       if (error) {
