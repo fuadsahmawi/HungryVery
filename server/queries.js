@@ -2,8 +2,8 @@ const Pool = require('pg').Pool
 const pool = new Pool({
   user: 'postgres',
   host: 'localhost',
-  database: 'postgres',
-  password: '',
+  database: 'fds',
+  password: 'Sgzb_1996',
   port: 5432,
 })
 // TODO: SQL Queries
@@ -223,39 +223,65 @@ const foodList = (request, response) => {
 //     client.release()
 //   }
 // }
-
-  const submitOrder = (request, response) => {
+// insert into Makes (cid, orderid, foodid, amount) values (944, 493, 51, 2);
+// CREATE TABLE Makes (
+  // 	cid 			INTEGER,
+  // 	orderid			INTEGER,
+  // 	foodid			INTEGER,
+  // 	amount          INTEGER,
+  // 	FOREIGN KEY (cid) references Customers,
+  // 	FOREIGN KEY (orderid) references Orders,
+  // 	FOREIGN KEY (foodid) references Food
+  // );
+  const  submitOrder = async (request, response) => {
     const { cid } = request.params
     const { cart, dlocation, postalcode, selected, timeStamp, cartPrice} = request.body
+    const client = await pool.connect();
+    try {
+    await client.query('BEGIN')
+    const orderInsert = 'INSERT INTO Orders (dlocation, postalcode, orderTime, assignTime, arrivalTime, departTime, deliveryTime, deliveryFee, totalCost, rid, riderid)' + 
+        'VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11) RETURNING *'
+    const res = await client.query(orderInsert, [dlocation, postalcode, timeStamp, null, null, null, null, 5, cartPrice[0].totalPrice, selected, null])
+    const makesInsert = 'INSERT INTO Makes (cid, orderid, foodid, amount)' + 
+        'VALUES ($1, $2, $3, $4)'
+    const foodUpdate = 'UPDATE Food SET fname = $1, category = $2, amountOrdered = $3, orderLimit = $4, price = $5 WHERE foodid = $6'
+    const orderId = res.rows[0].orderid;
+    for (var i = 0; i < cart.length; i ++) {
+      const foodIdCur = cart[i].foodid
+      const fnameCur = cart[i].fname
+      const categoryCur = cart[i].category
+      const orderLimitCur = cart[i].orderLimit
+      const priceCur = cart[i].price
+      const amountCur = cart[i].quantity
+      const updateAmount = cart[i].quantity + cart[i].amountordered
+      await client.query(makesInsert, [cid, orderId, foodIdCur, amountCur])
+      await client.query(foodUpdate, [fnameCur, categoryCur, updateAmount, orderLimitCur, priceCur, foodIdCur])
+    }
+    await client.query('COMMIT')
+    response.status(200).json(res.rows[0].orderid)
+  } catch (e) {
+    await client.query('ROLLBACK')
+    throw e
+  } finally {
+    client.release()
+  }
+    // client.query('SELECT foodid, fname, category, amountOrdered, orderLimit, price FROM Sells natural join Food WHERE rid = $1', [selected], (err, res) => {
+    //   if (err) {
+    //     throw err
+    //   }
+    //   response.status(200).json(res)
+    // })
     
-    pool.connect((err, client, done) => {
-      const shouldAbort = err => {
-        if (err) {
-          console.error('Error in transaction', err.stack)
-          client.query('ROLLBACK', err => {
-            if (err) {
-              console.error('Error rolling back client', err.stack)
-            }
-            // release the client back to the pool
-            done()
-          })
-        }
-        return !!err
-      }
-      client.query('BEGIN', err => {
-        if (shouldAbort(err)) return
-        client.query('SELECT foodid, fname, category, amountOrdered, orderLimit, price FROM Sells natural join Food WHERE rid = $1', [selected], (err, res) => {
-          if (shouldAbort(err)) return
+    // pool.connect((err, client, done) => {
+    //   if (err) {
+    //     return console.error('Error acquiring client', err.stack)
+    //   }
 
-            client.query('COMMIT', err => {
-              if (err) {
-                console.error('Error committing transaction', err.stack)
-              }
-              done()
-            })
-        })
-      })
-    })
+    //     client.query('SELECT foodid, fname, category, amountOrdered, orderLimit, price FROM Sells natural join Food WHERE rid = $1', [selected], (err, res) => {
+   
+    //           done()
+    //         })
+    //     })
 }
 
 // List of reviews by a certain Restaurant
@@ -481,6 +507,7 @@ module.exports = {
   reviewList,
   addFood,
   getFood,
+  submitOrder,
   assignFood,
   updateFood,
   hourlyOrderSummary,
