@@ -337,6 +337,7 @@ const topFiveFoodItems = (request, response) => {
 // Promo Campaign: for each campaign, duration (days/hours), avg and total number of orders
 // TODO: avg number of orders per promo campaign
 const promotionsSummary = (request, response) => {
+  const rid = parseInt(request.params.rid)
   pool.query(
     'SELECT P.promoid, P.pname, ' +
     'COALESCE(DATE_PART(\'day\', enddatetime::timestamp-startdatetime::timestamp), DATE_PART(\'day\', NOW()::timestamp-startdatetime::timestamp)) as daysDuration, ' +
@@ -347,7 +348,8 @@ const promotionsSummary = (request, response) => {
     'FROM Promotions AS P, Sells AS S, Makes as M ' +
     'WHERE M.foodid = S.foodid ' +
     'AND S.promoid = P.promoid ' +
-    'GROUP BY P.promoid ', (error, results) => {
+    'AND S.rid = $1 ' +
+    'GROUP BY P.promoid ', [rid], (error, results) => {
       if (error) {
         throw error
       }
