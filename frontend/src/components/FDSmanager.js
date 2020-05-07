@@ -1,6 +1,4 @@
 import React, { Fragment, useEffect, useState } from "react";
-import DropdownButton from 'react-bootstrap/DropdownButton';
-import Dropdown from 'react-bootstrap/Dropdown';
 
 /*
     TODO:
@@ -114,6 +112,7 @@ const FDSManager = () => {
                 <button className="btn btn-success">Delete Parttimer</button>
             </form> */}
             <h4 className="text-center mt-5">Monthly Order Summary</h4>
+            <br/>
             <table class="table">
                 <thead>
                     <tr>
@@ -133,7 +132,8 @@ const FDSManager = () => {
                 </tbody>
             </table>
             <br />
-            <h4 className="text-center mt-5">District per hour Order Summary</h4>
+            <h4 className="text-center mt-5">District Hourly Order Summary</h4>
+            <br/>
             <table class="table">
                 <thead>
                     <tr>
@@ -154,6 +154,7 @@ const FDSManager = () => {
             </table>
             <br />
             <h4 className="text-center mt-5">Monthly Summary of Rider Performance</h4>
+            <br />
             <table class="table">
                 <thead>
                     <tr>

@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect, useState } from "react";
+import React, { Fragment, useState } from "react";
 import { NotificationContainer } from 'react-notifications';
 import 'react-notifications/lib/notifications.css';
 import { NotificationManager } from 'react-notifications';
@@ -38,8 +38,10 @@ const CustomerCRUD = () => {
                 method: "DELETE"
             });
             console.log(response);
+            NotificationManager.success('Customer Deleted', 'Successful', 2000);
         } catch (err) {
             console.error(err.message);
+            NotificationManager.error('Check whether Customer ID is correct', 'Error', 2000);
         }
     };
 
@@ -49,8 +51,10 @@ const CustomerCRUD = () => {
             const response = await fetch("http://localhost:3001/customer/"+g_cid);
             const jsonData = await response.json();
             setSummary(jsonData);
+            NotificationManager.success('Details Retrieved', 'Successful!', 2000);
         } catch (err) {
             console.error(err.message);
+            NotificationManager.error('Check whether Customer ID is correct', 'Error', 2000);
         }
     }
     
@@ -85,9 +89,10 @@ const CustomerCRUD = () => {
                     placeholder="Customer ID"
                     onChange={e => setgcid(e.target.value)}>
                 </input>
-                <button className="btn btn-success">Get Details</button>
+                <button className="btn btn-success">Retrieve</button>
             </form>
             <h4 className="text-center mt-5">Customer Details</h4>
+            <br/>
             <table class="table">
                 <thead>
                     <tr>
@@ -133,7 +138,7 @@ const CustomerCRUD = () => {
                     placeholder="Type Customer ID here"
                     onChange={e => setdcid(e.target.value)}>
                 </input>
-                <button className="btn btn-success">Delete Now</button>
+                <button className="btn btn-danger">Delete</button>
             </form>
             <h4 className="text-center mt-5">Update Customer</h4>
             <form className="d-flex mt-5" onSubmit={putUpdate}>

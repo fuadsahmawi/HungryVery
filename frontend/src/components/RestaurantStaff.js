@@ -1,6 +1,10 @@
 import React, { Fragment, useEffect, useState } from "react";
 import DropdownButton from 'react-bootstrap/DropdownButton';
 import Dropdown from 'react-bootstrap/Dropdown';
+import { NotificationContainer } from 'react-notifications';
+import 'react-notifications/lib/notifications.css';
+import { NotificationManager } from 'react-notifications';
+
 
 /*
     Requirements should be met. May want to find name of five best items in each restaurant
@@ -39,8 +43,10 @@ const RestaurantStaff = () => {
                 body: JSON.stringify(body)
             });
             console.log(response);
+            NotificationManager.success('New staff added!', 'Successful!', 2000);
         } catch (err) {
             console.error(err.message);
+            NotificationManager.error('Check whether Restaurant ID is correct', 'Error', 2000);
         }
     }; 
 
@@ -54,8 +60,10 @@ const RestaurantStaff = () => {
                 body: JSON.stringify(body)
             });
             console.log(response);
+            NotificationManager.success('Staff name updated', 'Successful!', 2000);
         } catch (err) {
             console.error(err.message);
+            NotificationManager.error('Check whether Staff ID is correct', 'Error', 2000);
         }
     }; 
 
@@ -69,8 +77,14 @@ const RestaurantStaff = () => {
                 body: JSON.stringify(body)
             });
             console.log(response);
+            if (response.status === 200) {
+            NotificationManager.success('Food added', 'Successful!', 2000);
+        } else {
+            NotificationManager.error('Check whether number for order is smaller than amount ordered', 'Error', 2000);
+        }
         } catch (err) {
             console.error(err.message);
+            NotificationManager.error('Food cannot be added', 'Error', 2000);
         }
     }; 
 
@@ -84,8 +98,14 @@ const RestaurantStaff = () => {
                 body: JSON.stringify(body)
             });
             console.log(response);
+            if (response.status === 200) {
+            NotificationManager.success('New promotion added!', 'Successful!', 2000);
+            } else {
+            NotificationManager.error('Check if you entered end date earlier than start date', 'Error', 2000);
+            }
         } catch (err) {
             console.error(err.message);
+            NotificationManager.error('Promotion cannot be added', 'Error', 2000);
         }
     }; 
 
@@ -309,6 +329,7 @@ const RestaurantStaff = () => {
                     ))}
                 </tbody>
             </table>
+        <NotificationContainer/>
         </Fragment>
     )
 }

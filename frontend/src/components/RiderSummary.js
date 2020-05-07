@@ -1,4 +1,7 @@
-import React, { Fragment, useEffect, useState } from "react";
+import React, { Fragment, useState } from "react";
+import { NotificationContainer } from 'react-notifications';
+import 'react-notifications/lib/notifications.css';
+import { NotificationManager } from 'react-notifications';
 
 const RiderSummary = () => {
     const [update_riderid, seturid] = useState('');
@@ -18,8 +21,10 @@ const RiderSummary = () => {
                 body: JSON.stringify(body)
             });
             console.log(response);
+            NotificationManager.success('Details updated', 'Successful!', 2000);
         } catch (err) {
             console.error(err.message);
+            NotificationManager.error('Check whether Rider ID is correct', 'Error', 2000);
         }
     };
 
@@ -64,7 +69,7 @@ const RiderSummary = () => {
                     placeholder="Vehicle Number"
                     onChange={e => setvnumber(e.target.value)}>
                 </input>
-                <button className="btn btn-success">Update Details</button>
+                <button className="btn btn-success">Update</button>
             </form>
             <h4 className="text-center mt-5">Rider Summary</h4>
             <form className="d-flex mt-5" onSubmit={getSummary}>
@@ -78,6 +83,7 @@ const RiderSummary = () => {
                 <button className="btn btn-success">Submit</button>
             </form>
             <h4 className="text-center mt-5">Rider Monthly Performance Table</h4>
+            <br/>
             <table class="table">
                 <thead>
                     <tr>
@@ -99,6 +105,7 @@ const RiderSummary = () => {
                 </tbody>
             </table>
             <br />
+        <NotificationContainer/>
         </Fragment>
     )
 }
