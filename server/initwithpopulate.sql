@@ -11916,3 +11916,27 @@ insert into PostalDistrict (district, sector) values ('27', '75');
 insert into PostalDistrict (district, sector) values ('27', '76');
 insert into PostalDistrict (district, sector) values ('28', '79');
 insert into PostalDistrict (district, sector) values ('28', '80');
+
+
+CREATE OR REPLACE FUNCTION check_promotions_date_constraint() RETURNS TRIGGER
+	AS $$
+DECLARE
+	promo text;
+BEGIN
+	SELECT P.promoid INTO promo
+		FROM Promotions as P
+		WHERE P.promoid != NEW.promoid
+		AND EXTRACT(EPOCH FROM (NEW.enddatetime-NEW.startdatetime))/3600 <= 0;
+	IF promo IS NOT NULL THEN
+		RAISE EXCEPTION '% (promoid: %) is an invalid promotion, end date should be later than start date.', NEW.pname, NEW.promoid;
+	END IF ;
+	RETURN NULL;
+END;
+$$ LANGUAGE plpgsql ;
+
+DROP TRIGGER IF EXISTS promotions_trigger ON Promotions CASCADE;
+CREATE TRIGGER promotions_trigger
+	BEFORE UPDATE OF enddatetime OR INSERT
+	ON Promotions
+	FOR EACH ROW 
+	EXECUTE PROCEDURE check_promotions_date_constraint();
