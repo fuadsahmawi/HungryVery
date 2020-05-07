@@ -99,6 +99,17 @@ const RestaurantStaff = () => {
         }
     };
 
+    const getPromoSummary = async () => {
+        try {
+            const response = await fetch("http://localhost:3001/promotions-summary/");
+            const jsonData = await response.json();
+            setPromos(jsonData);
+        } catch (err) {
+            console.error(err.message);
+        }
+    };
+
+
     const getData = async (evt) => {
         // Monthly total number of completed orders, total cost of completed orders
         try {
@@ -116,27 +127,16 @@ const RestaurantStaff = () => {
         } catch (err) {
             console.error(err.message);
         }
-        try {
-            const response = await fetch("http://localhost:3001/promotions-summary/" + evt);
-            const jsonData = await response.json();
-            setPromos(jsonData);
-        } catch (err) {
-            console.error(err.message);
-        }
     }
 
     useEffect(() => {
         getRestaurants();
+        getPromoSummary();
     }, []);
 
     return (
         <Fragment>
             <h4 className="text-center mt-5">Restaurant Staff Page</h4>
-            <DropdownButton className="text-center mt-5" id="dropdown-basic-button" title="Restaurants" onSelect={getData}>
-                {restaurant.map(restaurant => (
-                    <Dropdown.Item key={restaurant.rid} eventKey={restaurant.rid}>{restaurant.rname}</Dropdown.Item>
-                ))}
-            </DropdownButton>
             <h4 className="text-center mt-5">Add New Staff</h4>
             <form className="d-flex mt-5" onSubmit={postStaff}>
                 <input 
@@ -244,8 +244,12 @@ const RestaurantStaff = () => {
                 </input>
                 <button className="btn btn-success">Submit</button>
             </form>
-
             <br />
+            <DropdownButton className="text-center mt-5" id="dropdown-basic-button" title="Restaurants" onSelect={getData}>
+                {restaurant.map(restaurant => (
+                    <Dropdown.Item key={restaurant.rid} eventKey={restaurant.rid}>{restaurant.rname}</Dropdown.Item>
+                ))}
+            </DropdownButton>
             <h4 className="text-center mt-5">Staff Summary Table</h4>
             <table class="table">
                 <thead>
