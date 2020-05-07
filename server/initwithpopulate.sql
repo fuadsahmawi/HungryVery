@@ -11981,3 +11981,66 @@ CREATE TRIGGER order_date_trigger
 	FOR EACH ROW 
 	EXECUTE PROCEDURE check_orders_date_constraint();
 
+
+/* 
+Trigger used to check if food items added into Food table is valid.
+Ensures that food amount ordered does not exceed the order limit.
+*/
+CREATE OR REPLACE FUNCTION check_food_amount_constraint() RETURNS TRIGGER
+	AS $$
+DECLARE
+	food text;
+BEGIN
+	SELECT F.foodid INTO food
+		FROM Food AS F
+		WHERE F.foodid != NEW.foodid
+		AND NEW.amountordered > NEW.orderlimit;
+
+	IF food IS NOT NULL THEN
+		RAISE EXCEPTION '% (foodid=%) is an invalid food entry. Amount ordered should not exceed limit.', NEW.fname, NEW.foodid;
+		RETURN NULL;
+	END IF ;
+	RETURN NEW;
+END;
+$$ LANGUAGE plpgsql ;
+
+DROP TRIGGER IF EXISTS food_amount_trigger ON Food CASCADE;
+CREATE TRIGGER food_amount_trigger
+	BEFORE UPDATE OF amountOrdered, orderLimit OR INSERT
+	ON Food
+	FOR EACH ROW 
+	EXECUTE FUNCTION check_food_amount_constraint();
+	
+
+
+/* 
+Trigger used to check if food items added into Food table is valid.
+Ensures that food amount ordered or order limit are positive numbers.
+*/
+CREATE OR REPLACE FUNCTION check_food_amount_negative_constraint() RETURNS TRIGGER
+	AS $$
+DECLARE
+	food text;
+BEGIN
+	SELECT F.foodid INTO food
+		FROM Food AS F
+		WHERE F.foodid != NEW.foodid
+		AND NEW.amountordered < 0
+		OR NEW.orderlimit < 0;
+
+	IF food IS NOT NULL THEN
+		RAISE EXCEPTION '% (foodid=%) is an invalid food entry. Amount ordered or limit should not be negative.', NEW.fname, NEW.foodid;
+		RETURN NULL;
+	END IF ;
+	RETURN NEW;
+END;
+$$ LANGUAGE plpgsql ;
+
+DROP TRIGGER IF EXISTS food_amount_negative_trigger ON Food CASCADE;
+CREATE TRIGGER food_amount_negative_trigger
+	BEFORE UPDATE OF amountOrdered, orderLimit OR INSERT
+	ON Food
+	FOR EACH ROW 
+	EXECUTE PROCEDURE check_food_amount_negative_constraint();
+
+
