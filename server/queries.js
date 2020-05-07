@@ -85,9 +85,9 @@ const addRider = (request, response) => {
 // Update details of rider (Rider POV)
 
 const updateRider = (request, response) => {
-  const { rid } = request.params
+  const { riderid } = request.params
   const { ridername, vnumber } = request.body
-  pool.query("UPDATE riders SET ridername = $1, vnumber = $2 WHERE riderid = $3", [ridername, vnumber, rid], (error, results) => {
+  pool.query('UPDATE riders SET ridername = $1, vnumber = $2 WHERE riderid = $3', [ridername, vnumber, riderid], (error, results) => {
     if (error) {
       throw error
     }
