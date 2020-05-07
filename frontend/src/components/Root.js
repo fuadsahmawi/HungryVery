@@ -8,8 +8,9 @@ import {
 } from 'react-router-dom'
 
 //Components
-import Customer from './Customer';
-import Home from './Home';
+import Customer from './Customer.js';
+import Restaurant from './Restaurant.js';
+import Home from './Home.js';
 import Staff from './RestaurantStaff';
 import Manager from './FDSmanager.js';
 import Rider from './RiderSummary.js';
@@ -93,7 +94,8 @@ export default function AuthExample () {
         <ul>
           <div className="text-center mt-5">
           <Link to="/"><button>Home</button></Link>{" "}
-          <Link to="/customer"><button onClick={() => {fakeAuth.signout()}}>Customer</button></Link>{" "}
+          <Link to="/account"><button onClick={() => {fakeAuth.signout()}}>Account</button></Link>{" "}
+          <Link to="/restaurant"><button onClick={() => {fakeAuth.signout()}}>Restaurant</button></Link>{" "}
           <Link to="/staff"><button onClick={() => {fakeAuth.signout()}}>Staff</button></Link>{" "}
           <Link to="/manager"><button onClick={() => {fakeAuth.signout()}}>Manager</button></Link>{" "}
           <Link to="/rider"><button onClick={() => {fakeAuth.signout()}}>Rider</button></Link>{" "}
@@ -101,10 +103,11 @@ export default function AuthExample () {
         </ul>
         <Route path="/" component={Home}/>
         <Route path="/login" component={Login}/>
-        <PrivateRoute path='/customer' component={Customer} />
+        <PrivateRoute path='/account' component={Customer} />
         <PrivateRoute path='/staff' component={Staff} />
         <PrivateRoute path='/manager' component={Manager} />
         <PrivateRoute path='/rider' component={Rider} />
+        <PrivateRoute path='/restaurant' component={Restaurant} />
       </div>
     </Router>
   )
