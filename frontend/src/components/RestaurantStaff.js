@@ -78,11 +78,8 @@ const RestaurantStaff = () => {
         } catch (err) {
             console.error(err.message);
         }
-    }
-
-    const getPromotions = async (evt) => {
         try {
-            const response = await fetch("http://localhost:3001/promotions-summary");
+            const response = await fetch("http://localhost:3001/promotions-summary/" + evt);
             const jsonData = await response.json();
             setPromos(jsonData);
         } catch (err) {
@@ -92,7 +89,6 @@ const RestaurantStaff = () => {
 
     useEffect(() => {
         getRestaurants();
-        getPromotions();
     }, []);
 
     return (
