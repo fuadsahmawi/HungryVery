@@ -49,8 +49,8 @@ const addCustomer = (request, response) => {
 
 const updateCustomer = (request, response) => {
   const { cid } = request.params
-  const { cname, contact } = request.body
-  pool.query('UPDATE Customers SET cname = $1, contact = $2 WHERE cid = $3', [cname, contact, cid], (error, results) => {
+  const { u_cname, u_contact } = request.body
+  pool.query('UPDATE Customers SET cname = $1, contact = $2 WHERE cid = $3', [u_cname, u_contact, cid], (error, results) => {
     if (error) {
       throw error
     }
@@ -87,7 +87,7 @@ const addRider = (request, response) => {
 const updateRider = (request, response) => {
   const { riderid } = request.params
   const { ridername, vnumber } = request.body
-  pool.query('UPDATE riders SET ridername = $1, vnumber = $2 WHERE riderid = $3', [ridername, vnumber, riderid], (error, results) => {
+  pool.query("UPDATE Riders SET ridername = $1, vnumber = $2 WHERE riderid = $3", [ridername, vnumber, riderid], (error, results) => {
     if (error) {
       throw error
     }

@@ -103,7 +103,7 @@ const RestaurantStaff = () => {
                     <Dropdown.Item key={restaurant.rid} eventKey={restaurant.rid}>{restaurant.rname}</Dropdown.Item>
                 ))}
             </DropdownButton>
-            <h4 className="text-center mt-5">Staff Update</h4>
+            <h4 className="text-center mt-5">Add New Staff</h4>
             <form className="d-flex mt-5" onSubmit={postStaff}>
                 <input 
                     type="text" 
