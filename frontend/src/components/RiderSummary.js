@@ -8,12 +8,12 @@ const RiderSummary = () => {
     const [riderid, setRider] = useState('');
     const [summary, setSummary] = useState([]);
 
-    const postUpdate = async (e) => {
+    const putUpdate = async (e) => {
         e.preventDefault();
         try {
             const body = {ridername,vnumber}
-            const response = await fetch("http://localhost:3001/riderupdate/" + update_riderid ,{
-                method: "POST",
+            const response = await fetch("http://localhost:3001/rider/" + update_riderid ,{
+                method: "PUT",
                 headers: {"Content-Type": "application/json"},
                 body: JSON.stringify(body)
             });
@@ -42,7 +42,7 @@ const RiderSummary = () => {
     return (
         <Fragment>
             <h4 className="text-center mt-5">Update Rider Details</h4>
-            <form className="d-flex mt-5" onSubmit={postUpdate}>
+            <form className="d-flex mt-5" onSubmit={putUpdate}>
                 <input 
                     type="text" 
                     className="form-control" 

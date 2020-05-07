@@ -21,6 +21,18 @@ const customerList = (request, response) => {
   })
 }
 
+// Get customer
+
+const getCustomer = (request, response) => {
+  const { cid } = request.params
+  pool.query('select cname, contact, rewardpoints from Customers where cid = $1', [cid], (error, results) => {
+    if (error) {
+      throw error
+    }
+    response.status(200).json(results.rows)
+  })
+}
+
 // Add new customer
 
 const addCustomer = (request, response) => {
@@ -75,7 +87,7 @@ const addRider = (request, response) => {
 const updateRider = (request, response) => {
   const { rid } = request.params
   const { ridername, vnumber } = request.body
-  pool.query("UPDATE riders SET ridername = 1, vnumber = $2 WHERE riderid = $3", [ridername, vnumber, rid], (error, results) => {
+  pool.query("UPDATE riders SET ridername = $1, vnumber = $2 WHERE riderid = $3", [ridername, vnumber, rid], (error, results) => {
     if (error) {
       throw error
     }
@@ -387,6 +399,7 @@ module.exports = {
   monthlyOrdersAndCost,
   customerList,
   restaurantList,
+  getCustomer,
   addCustomer,
   addStaff,
   deleteCustomer,

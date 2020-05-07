@@ -24,14 +24,15 @@ app.get('/', (request, response) => {
 
 // Add URL to the query functions
 app.get('/monthly-summary', db.monthlyOrdersAndCost)
-app.get('/customer', db.customerList)
+app.get('/customerlist', db.customerList)
+app.get('/customer/:cid',db.getCustomer)
 app.post('/customer', db.addCustomer)
 app.delete('/customer/:cid', db.deleteCustomer)
 app.put('/customer/:cid', db.updateCustomer)
 app.post('/rider', db.addRider)
 app.delete('/riderft/:riderid', db.deleteFulltimer)
 app.delete('/riderpt/:riderid', db.deleteParttimer)
-app.post('/riderupdate/:riderid', db.updateRider)
+app.put('/rider/:riderid', db.updateRider)
 app.get('/restaurant', db.restaurantList)
 app.get('/food/:rid', db.foodList)
 app.get('/review/:rid', db.reviewList)
