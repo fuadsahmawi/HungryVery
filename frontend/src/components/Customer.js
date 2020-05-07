@@ -1,16 +1,14 @@
 import React from 'react';
 
 // Components
-import RestaurantList from './RestaurantList';
 import CustomerCRUD from './CustomerCRUD';
 
 function Customer(){
 
   return (
     <div>
+      <h3 className="text-center mt-5">Your Account</h3>
       <CustomerCRUD />
-      <h4 className="text-center mt-5">Browse Restaurants Here</h4>
-      <RestaurantList />
     </div>
   );
 }

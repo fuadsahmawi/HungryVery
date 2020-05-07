@@ -49,8 +49,8 @@ const addCustomer = (request, response) => {
 
 const updateCustomer = (request, response) => {
   const { cid } = request.params
-  const { cname, contact } = request.body
-  pool.query('UPDATE Customers SET cname = $1, contact = $2 WHERE cid = $3', [cname, contact, cid], (error, results) => {
+  const { u_cname, u_contact } = request.body
+  pool.query('UPDATE Customers SET cname = $1, contact = $2 WHERE cid = $3', [u_cname, u_contact, cid], (error, results) => {
     if (error) {
       throw error
     }
@@ -60,11 +60,12 @@ const updateCustomer = (request, response) => {
 
 // Delete customer
 
-const deleteCustomer = (request, response) => {
+const deleteCustomer = (request, response,next) => {
   const { cid } = request.params
   pool.query('DELETE FROM Customers WHERE cid = $1', [cid], (error, results) => {
     if (error) {
-      throw error
+      next(error)
+      return
     }
     response.status(200).json(results.rows)
   })
@@ -74,7 +75,7 @@ const deleteCustomer = (request, response) => {
 
 const addRider = (request, response) => {
   const { rname, vnumber, mid } = request.body
-  pool.query('INSERT INTO riders(ridername, vnumber,mid) VALUES ($1, $2) RETURNING *', [rname, vnumber,mid], (error, results) => {
+  pool.query('INSERT INTO riders(ridername, vnumber,mid) VALUES ($1, $2) RETURNING *', [rname, vnumber, mid], (error, results) => {
     if (error) {
       throw error
     }
@@ -87,7 +88,7 @@ const addRider = (request, response) => {
 const updateRider = (request, response) => {
   const { riderid } = request.params
   const { ridername, vnumber } = request.body
-  pool.query('UPDATE riders SET ridername = $1, vnumber = $2 WHERE riderid = $3', [ridername, vnumber, riderid], (error, results) => {
+  pool.query("UPDATE Riders SET ridername = $1, vnumber = $2 WHERE riderid = $3", [ridername, vnumber, riderid], (error, results) => {
     if (error) {
       throw error
     }
@@ -98,8 +99,8 @@ const updateRider = (request, response) => {
 // Delete Fulltimer rider (Manager POV)
 
 const deleteFulltimer = (request, response) => {
-  const { rid } = request.params
-  pool.query('DELETE FROM fulltimer WHERE riderid = $1', [rid], (error, results) => {
+  const { riderid } = request.params
+  pool.query('DELETE FROM fulltimer WHERE riderid = $1', [riderid], (error, results) => {
     if (error) {
       throw error
     }
@@ -108,8 +109,8 @@ const deleteFulltimer = (request, response) => {
 }
 
 const deleteParttimer = (request, response) => {
-  const { rid } = request.params
-  pool.query('DELETE FROM parttimer WHERE riderid = $1', [rid], (error, results) => {
+  const { riderid } = request.params
+  pool.query('DELETE FROM parttimer WHERE riderid = $1', [riderid], (error, results) => {
     if (error) {
       throw error
     }
@@ -130,11 +131,12 @@ const restaurantList = (request, response) => {
 
 // Add new food
 
-const addFood = (request, response) => {
-  const { fname, category, amountOrdered, orderLimit, price} = request.body
+const addFood = (request, response,next) => {
+  const { fname, category, amountOrdered, orderLimit, price } = request.body
   pool.query('INSERT INTO Food(fname, category, amountOrdered, orderLimit, price) VALUES ($1, $2, $3, $4, $5) RETURNING *', [fname, category, amountOrdered, orderLimit, price], (error, results) => {
     if (error) {
-      throw error
+      next(error)
+      return
     }
     response.status(200).json(results.rows)
   })
@@ -154,12 +156,13 @@ const assignFood = (request, response) => {
 
 // Update details of Food
 
-const updateFood = (request, response) => {
+const updateFood = (request, response, next) => {
   const { foodid } = request.params
-  const { fname, category, amountOrdered, orderLimit, price} = request.body
+  const { fname, category, amountOrdered, orderLimit, price } = request.body
   pool.query('UPDATE Food SET fname = $1, category = $2, amountOrdered = $3, orderLimit = $4, price = $5, WHERE foodid = $6', [fname, category, amountOrdered, orderLimit, price, foodid], (error, results) => {
     if (error) {
-      throw error
+      next(error)
+      return
     }
     response.status(200).json(results.rows)
   })
@@ -259,6 +262,32 @@ const addStaff = (request, response) => {
   })
 }
 
+// Add new restaurant staff
+
+const updateStaff = (request, response) => {
+  const { staffid } = request.params
+  const { newname } = request.body
+  pool.query('UPDATE Staff SET sname = $1 where staffid = $2', [newname, staffid], (error, results) => {
+    if (error) {
+      throw error
+    }
+    response.status(200).json(results.rows)
+  })
+}
+// Add new promotion staff
+
+const addPromotion = (request, response,next) => {
+  const { pname, discount, startdate, enddate } = request.body
+  pool.query('INSERT INTO Promotions(pname,discount,StartDateTime,EndDateTime) VALUES ($1, $2, $3, $4) RETURNING *', [pname, discount, startdate, enddate], (error, results) => {
+    if (error) {
+      next(error)
+      return
+    }
+    response.status(200).json(results.rows)
+  })
+}
+
+
 // Summary information for FDS managers:
 // Monthly: Total number of new customers, total number of orders, total cost of orders
 
@@ -271,15 +300,6 @@ const monthlyOrdersAndCost = (request, response) => {
   })
 }
 
-// TODO: To get new customers, ensure month is current month, and is their first order
-// const monthNewCustomers = (request, response) => {
-//   pool.query('SELECT EXTRACT(month FROM orderTime) as month, COUNT(*) as totalOrders FROM Orders GROUP BY EXTRACT(month FROM orderTime)', (error, results) => {
-//     if (error) {
-//       throw error
-//     }
-//     response.status(200).json(results.rows)
-//   })
-// }
 
 // Monthly-Customer: total number of orders by that customer, total cost of orders by that customer
 const monthlyCustomerOrderAndCost = (request, response) => {
@@ -298,29 +318,20 @@ const monthlyCustomerOrderAndCost = (request, response) => {
     })
 }
 
-// // Hour-Delivery Location: total number of orders at that hour for that location
-// const hourlyOrderSummary = (request, response) => {
-//   const location = String(request.params.location)
-//   pool.query('SELECT EXTRACT(hour FROM orderTime) as orderHour, COUNT(*) as numberOfOrders FROM Orders GROUP BY EXTRACT(hour FROM orderTime) WHERE dlocation = $1', [location], (error, results) => {
-//     if (error) {
-//       throw error
-//     }
-//     response.status(200).json(results.rows)
-//   })
-// }
+
 // district-hour-totalorder: total number of orders in that district by hours
 const hourlyOrderSummary = (request, response) => {
-    const location = String(request.params.location)
-    pool.query(
-      "select district, EXTRACT(hour FROM orderTime) as hour, count(orderid) as totalorders from orders JOIN "+ 
-      "postaldistrict ON left(postalcode,2) = sector group by district, EXTRACT(hour FROM orderTime) order by district", 
-      (error, results) => {
+  const location = String(request.params.location)
+  pool.query(
+    "select district, EXTRACT(hour FROM orderTime) as hour, count(orderid) as totalorders from orders JOIN " +
+    "postaldistrict ON left(postalcode,2) = sector group by district, EXTRACT(hour FROM orderTime) order by district",
+    (error, results) => {
       if (error) {
         throw error
       }
       response.status(200).json(results.rows)
     })
-  }
+}
 
 
 // Rider-Month: total number of orders delivered, avg delivery time, 
@@ -374,10 +385,10 @@ const topFiveFoodItems = (request, response) => {
 const promotionsSummary = (request, response) => {
   pool.query(
     'SELECT P.promoid, P.pname, ' +
-    'COALESCE(DATE_PART(\'day\', enddatetime::timestamp-startdatetime::timestamp), DATE_PART(\'day\', NOW()::timestamp-startdatetime::timestamp)) as daysDuration, ' +
-    // 'COALESCE(DATE_PART(\'timezone_hour\', enddatetime::timestamp-startdatetime::timestamp), DATE_PART(\'timezone_hour\', NOW()::timestamp-startdatetime::timestamp)) as hoursDuration, ' +
-    // 'COALESCE((EXTRACT(EPOCH FROM (enddatetime-startdatetime))/1440), (EXTRACT(EPOCH FROM (NOW()-startdatetime))/1440)) as daysDuration, ' +
-    'COALESCE((EXTRACT(EPOCH FROM (enddatetime-startdatetime))/3600), (EXTRACT(EPOCH FROM (NOW()-startdatetime))/3600)) as hoursDuration, ' +
+    'COALESCE(DATE_PART(\'day\', enddatetime::timestamp-startdatetime::timestamp), ' +
+    'DATE_PART(\'day\', NOW()::timestamp-startdatetime::timestamp)) as daysDuration, ' +
+    'COALESCE((EXTRACT(EPOCH FROM (enddatetime-startdatetime))/3600), ' +
+    '(EXTRACT(EPOCH FROM (NOW()-startdatetime))/3600)) as hoursDuration, ' +
     'COUNT(DISTINCT M.orderid) as numberOfOrders ' +
     'FROM Promotions AS P, Sells AS S, Makes as M ' +
     'WHERE M.foodid = S.foodid ' +
@@ -390,14 +401,11 @@ const promotionsSummary = (request, response) => {
     })
 }
 
-// Summary information for delivery riders:
-// Weekly-Rider: total number of orders, total hours, total salary
-
 
 // Monthly-Rider: total number of orders, total hours, total salary, average delivery time 
 const monthlyRiderSummary = (request, response) => {
   pool.query(
-    'SELECT R1.riderid, EXTRACT(month FROM O.orderTime) as month, COUNT(distinct O.orderid) as numberOfOrders ' +
+    'SELECT R1.riderid, EXTRACT(month FROM O.orderTime) as month, COUNT(distinct O.orderid) as numberOfOrders, ' +
     'SUM(O.deliveryfee) as totalDeliveryFees, AVG((EXTRACT(EPOCH FROM (O.deliverytime-O.arrivaltime))/216000)) as averageDeliveryTime ' +
     'FROM Orders AS O, Riders AS R1, Reviews AS R2 ' +
     'WHERE R1.riderid = O.riderid ' +
@@ -437,6 +445,8 @@ module.exports = {
   getCustomer,
   addCustomer,
   addStaff,
+  updateStaff,
+  addPromotion,
   deleteCustomer,
   updateCustomer,
   addRider,
@@ -460,6 +470,7 @@ module.exports = {
   topFiveFoodItems,
   promotionsList
 }
+
 
 /* Get all users
 const getUsers = (request, response) => {

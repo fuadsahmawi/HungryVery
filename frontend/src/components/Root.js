@@ -1,4 +1,4 @@
-import React from 'react'
+import React from 'react';
 import {
   BrowserRouter as Router,
   Route,
@@ -8,21 +8,67 @@ import {
 } from 'react-router-dom'
 
 //Components
-import Customer from './Customer';
-import Home from './Home';
+import Customer from './Customer.js';
+import Restaurant from './Restaurant.js';
+import Home from './Home.js';
 import Staff from './RestaurantStaff';
 import Manager from './FDSmanager.js';
 import Rider from './RiderSummary.js';
+import SignUp from './SignUp.js';
 
-const fakeAuth = {
-  isAuthenticated: false,
+const fakeAuthC = {
+  isAuthenticatedC: false,
   authenticate(cb) {
-    this.isAuthenticated = true
+    this.isAuthenticatedC = true
     setTimeout(cb, 100)
   },
   signout(cb) {
-    this.isAuthenticated = false
+    this.isAuthenticatedC = false
     setTimeout(cb, 100)
+  }
+}
+
+const fakeAuthS = {
+  isAuthenticatedS: false,
+  authenticate(cb) {
+    this.isAuthenticatedS = true
+    setTimeout(cb, 100)
+  },
+  signout(cb) {
+    this.isAuthenticatedS = false
+    setTimeout(cb, 100)
+  }
+}
+
+const fakeAuthM = {
+  isAuthenticatedM: false,
+  authenticate(cb) {
+    this.isAuthenticatedM = true
+    setTimeout(cb, 100)
+  },
+  signout(cb) {
+    this.isAuthenticatedM = false
+    setTimeout(cb, 100)
+  }
+}
+
+const fakeAuthR = {
+  isAuthenticatedR: false,
+  authenticate(cb) {
+    this.isAuthenticatedR = true
+    setTimeout(cb, 100)
+  },
+  signout(cb) {
+    this.isAuthenticatedR = false
+    setTimeout(cb, 100)
+  }
+}
+
+const user = {
+  id: '',
+  setUser(id) {
+    this.id = id
+    console.log(id)
   }
 }
 
@@ -31,11 +77,34 @@ class Login extends React.Component {
     redirectToReferrer: false
   }
   login = () => {
-    fakeAuth.authenticate(() => {
-      this.setState(() => ({
-        redirectToReferrer: true
-      }))
-    })
+    if (user.id === 'customer') {
+      fakeAuthC.authenticate(() => {
+        this.setState(() => ({
+          redirectToReferrer: true
+        }))
+      })
+    }
+    if (user.id === 'staff') {
+      fakeAuthS.authenticate(() => {
+        this.setState(() => ({
+          redirectToReferrer: true
+        }))
+      })
+    }
+    if (user.id === 'manager') {
+      fakeAuthM.authenticate(() => {
+        this.setState(() => ({
+          redirectToReferrer: true
+        }))
+      })
+    }
+    if (user.id === 'rider') {
+      fakeAuthR.authenticate(() => {
+        this.setState(() => ({
+          redirectToReferrer: true
+        }))
+      })
+    }
   }
   render() {
     const { from } = this.props.location.state || { from: { pathname: '/' } }
@@ -48,15 +117,60 @@ class Login extends React.Component {
     return (
       <div className="text-center mt-5">
         <p>You must log in to view the page</p>
-        <button onClick={this.login}>Log in</button>
+          <form className="d-flex mt-5">
+            <input
+              type="text" 
+              className="form-control" 
+              id={user}
+              placeholder="ID"
+              onChange={e => user.setUser(e.target.value)}>
+            </input>
+          </form>
+          <br/>
+          <button className="btn btn-success" onClick={this.login}>Login</button>
+          <br/>
+          <SignUp/>
       </div>
     )
   }
 }
 
-const PrivateRoute = ({ component: Component, ...rest }) => (
+const PrivateRouteS = ({ component: Component, ...rest }) => (
   <Route {...rest} render={(props) => (
-    fakeAuth.isAuthenticated === true
+    fakeAuthS.isAuthenticatedS === true
+      ? <Component {...props} />
+      : <Redirect to={{
+          pathname: '/login',
+          state: { from: props.location }
+        }} />
+  )} />
+)
+
+const PrivateRouteM = ({ component: Component, ...rest }) => (
+  <Route {...rest} render={(props) => (
+    fakeAuthM.isAuthenticatedM === true
+      ? <Component {...props} />
+      : <Redirect to={{
+          pathname: '/login',
+          state: { from: props.location }
+        }} />
+  )} />
+)
+
+const PrivateRouteR = ({ component: Component, ...rest }) => (
+  <Route {...rest} render={(props) => (
+    fakeAuthR.isAuthenticatedR === true
+      ? <Component {...props} />
+      : <Redirect to={{
+          pathname: '/login',
+          state: { from: props.location }
+        }} />
+  )} />
+)
+
+const PrivateRouteC = ({ component: Component, ...rest }) => (
+  <Route {...rest} render={(props) => (
+    fakeAuthC.isAuthenticatedC === true
       ? <Component {...props} />
       : <Redirect to={{
           pathname: '/login',
@@ -66,11 +180,35 @@ const PrivateRoute = ({ component: Component, ...rest }) => (
 )
 
 const AuthButton = withRouter(({ history }) => (
-  fakeAuth.isAuthenticated ? (
+  fakeAuthC.isAuthenticatedC ? (
     <div className="text-center mt-5">
     <p>
       Welcome! <button onClick={() => {
-        fakeAuth.signout(() => history.push('/'))
+        fakeAuthC.signout(() => history.push('/'))
+      }}>Sign out</button>
+    </p>
+    </div>
+  ) : fakeAuthS.isAuthenticatedS ? (
+    <div className="text-center mt-5">
+    <p>
+      Welcome! <button onClick={() => {
+        fakeAuthS.signout(() => history.push('/'))
+      }}>Sign out</button>
+    </p>
+    </div>
+  ) : fakeAuthM.isAuthenticatedM ? (
+    <div className="text-center mt-5">
+    <p>
+      Welcome! <button onClick={() => {
+        fakeAuthM.signout(() => history.push('/'))
+      }}>Sign out</button>
+    </p>
+    </div>
+  ) : fakeAuthR.isAuthenticatedR ? (
+    <div className="text-center mt-5">
+    <p>
+      Welcome! <button onClick={() => {
+        fakeAuthR.signout(() => history.push('/'))
       }}>Sign out</button>
     </p>
     </div>
@@ -93,18 +231,20 @@ export default function AuthExample () {
         <ul>
           <div className="text-center mt-5">
           <Link to="/"><button>Home</button></Link>{" "}
-          <Link to="/customer"><button onClick={() => {fakeAuth.signout()}}>Customer</button></Link>{" "}
-          <Link to="/staff"><button onClick={() => {fakeAuth.signout()}}>Staff</button></Link>{" "}
-          <Link to="/manager"><button onClick={() => {fakeAuth.signout()}}>Manager</button></Link>{" "}
-          <Link to="/rider"><button onClick={() => {fakeAuth.signout()}}>Rider</button></Link>{" "}
+          <Link to="/account"><button>Account</button></Link>{" "}
+          <Link to="/restaurant"><button>Restaurant</button></Link>{" "}
+          <Link to="/staff"><button>Staff</button></Link>{" "}
+          <Link to="/manager"><button>Manager</button></Link>{" "}
+          <Link to="/rider"><button>Rider</button></Link>{" "}
           </div>
         </ul>
         <Route path="/" component={Home}/>
         <Route path="/login" component={Login}/>
-        <PrivateRoute path='/customer' component={Customer} />
-        <PrivateRoute path='/staff' component={Staff} />
-        <PrivateRoute path='/manager' component={Manager} />
-        <PrivateRoute path='/rider' component={Rider} />
+        <PrivateRouteC path='/account' component={Customer} />
+        <PrivateRouteS path='/staff' component={Staff} />
+        <PrivateRouteM path='/manager' component={Manager} />
+        <PrivateRouteR path='/rider' component={Rider} />
+        <PrivateRouteC path='/restaurant' component={Restaurant} />
       </div>
     </Router>
   )

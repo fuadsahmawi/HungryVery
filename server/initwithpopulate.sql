@@ -11916,3 +11916,131 @@ insert into PostalDistrict (district, sector) values ('27', '75');
 insert into PostalDistrict (district, sector) values ('27', '76');
 insert into PostalDistrict (district, sector) values ('28', '79');
 insert into PostalDistrict (district, sector) values ('28', '80');
+
+
+/*
+Trigger used to check if promotion added into Promotions table is valid. 
+Ensures that end date of promotion is later than start date. 
+*/
+CREATE OR REPLACE FUNCTION check_promotions_date_constraint() RETURNS TRIGGER
+	AS $$
+DECLARE
+	promo text;
+BEGIN
+	SELECT P.promoid INTO promo
+		FROM Promotions as P
+		WHERE P.promoid != NEW.promoid
+		AND EXTRACT(EPOCH FROM (NEW.enddatetime-NEW.startdatetime))/3600 <= 0;
+	IF promo IS NOT NULL THEN
+		RAISE EXCEPTION '% (promoid: %) is an invalid promotion, end date should be later than start date.', NEW.pname, NEW.promoid;
+		RETURN NULL;
+	END IF ;
+	RETURN NEW;
+END;
+$$ LANGUAGE plpgsql ;
+
+DROP TRIGGER IF EXISTS promotions_trigger ON Promotions CASCADE;
+CREATE TRIGGER promotions_trigger
+	BEFORE UPDATE OF enddatetime OR INSERT
+	ON Promotions
+	FOR EACH ROW 
+	EXECUTE PROCEDURE check_promotions_date_constraint();
+
+/* 
+Trigger used to check if order added into Orders table is valid.
+Ensures that subsequent timestamps are later than earlier.
+From earliest to latest:
+OrderTime -> AssignTime -> ArrivalTime -> DepartTime -> DeliveryTime
+*/
+CREATE OR REPLACE FUNCTION check_orders_date_constraint() RETURNS TRIGGER
+	AS $$
+DECLARE
+	new_order text;
+BEGIN
+	SELECT O.orderid INTO new_order
+		FROM Orders AS O
+		WHERE O.orderid != NEW.orderid
+		AND EXTRACT(EPOCH FROM (NEW.assignTime - NEW.orderTime))/3600 <= 0
+		OR EXTRACT(EPOCH FROM (NEW.arrivalTime - NEW.assignTime))/3600 <= 0
+		OR EXTRACT(EPOCH FROM (NEW.departTime - NEW.arrivalTime))/3600 <= 0
+		OR EXTRACT(EPOCH FROM (NEW.deliveryTime - NEW.departTime))/3600 <= 0;
+
+	IF new_order IS NOT NULL THEN
+		RAISE EXCEPTION '% is an invalid order. Please check the timestamps.', NEW.orderid;
+		RETURN NULL;
+	END IF ;
+	RETURN NEW;
+END;
+$$ LANGUAGE plpgsql ;
+
+DROP TRIGGER IF EXISTS order_date_trigger ON Orders CASCADE;
+
+CREATE TRIGGER order_date_trigger
+	BEFORE UPDATE OF ordertime, assigntime, arrivaltime, departtime, deliverytime OR INSERT
+	ON Orders
+	FOR EACH ROW 
+	EXECUTE PROCEDURE check_orders_date_constraint();
+
+
+/* 
+Trigger used to check if food items added into Food table is valid.
+Ensures that food amount ordered does not exceed the order limit.
+*/
+CREATE OR REPLACE FUNCTION check_food_amount_constraint() RETURNS TRIGGER
+	AS $$
+DECLARE
+	food text;
+BEGIN
+	SELECT F.foodid INTO food
+		FROM Food AS F
+		WHERE F.foodid != NEW.foodid
+		AND NEW.amountordered > NEW.orderlimit;
+
+	IF food IS NOT NULL THEN
+		RAISE EXCEPTION '% (foodid=%) is an invalid food entry. Amount ordered should not exceed limit.', NEW.fname, NEW.foodid;
+		RETURN NULL;
+	END IF ;
+	RETURN NEW;
+END;
+$$ LANGUAGE plpgsql ;
+
+DROP TRIGGER IF EXISTS food_amount_trigger ON Food CASCADE;
+CREATE TRIGGER food_amount_trigger
+	BEFORE UPDATE OF amountOrdered, orderLimit OR INSERT
+	ON Food
+	FOR EACH ROW 
+	EXECUTE FUNCTION check_food_amount_constraint();
+	
+
+
+/* 
+Trigger used to check if food items added into Food table is valid.
+Ensures that food amount ordered or order limit are positive numbers.
+*/
+CREATE OR REPLACE FUNCTION check_food_amount_negative_constraint() RETURNS TRIGGER
+	AS $$
+DECLARE
+	food text;
+BEGIN
+	SELECT F.foodid INTO food
+		FROM Food AS F
+		WHERE F.foodid != NEW.foodid
+		AND NEW.amountordered < 0
+		OR NEW.orderlimit < 0;
+
+	IF food IS NOT NULL THEN
+		RAISE EXCEPTION '% (foodid=%) is an invalid food entry. Amount ordered or limit should not be negative.', NEW.fname, NEW.foodid;
+		RETURN NULL;
+	END IF ;
+	RETURN NEW;
+END;
+$$ LANGUAGE plpgsql ;
+
+DROP TRIGGER IF EXISTS food_amount_negative_trigger ON Food CASCADE;
+CREATE TRIGGER food_amount_negative_trigger
+	BEFORE UPDATE OF amountOrdered, orderLimit OR INSERT
+	ON Food
+	FOR EACH ROW 
+	EXECUTE PROCEDURE check_food_amount_negative_constraint();
+
+
