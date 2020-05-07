@@ -11918,6 +11918,10 @@ insert into PostalDistrict (district, sector) values ('28', '79');
 insert into PostalDistrict (district, sector) values ('28', '80');
 
 
+/*
+Trigger used to check if promotion added into Promotions table is valid. 
+Ensures that end date of promotion is later than start date. 
+*/
 CREATE OR REPLACE FUNCTION check_promotions_date_constraint() RETURNS TRIGGER
 	AS $$
 DECLARE
@@ -11940,3 +11944,38 @@ CREATE TRIGGER promotions_trigger
 	ON Promotions
 	FOR EACH ROW 
 	EXECUTE PROCEDURE check_promotions_date_constraint();
+
+/* 
+Trigger used to check if order added into Orders table is valid.
+Ensures that subsequent timestamps are later than earlier.
+From earliest to latest:
+OrderTime -> AssignTime -> ArrivalTime -> DepartTime -> DeliveryTime
+*/
+CREATE OR REPLACE FUNCTION check_orders_date_constraint() RETURNS TRIGGER
+	AS $$
+DECLARE
+	new_order text;
+BEGIN
+	SELECT O.orderid INTO new_order
+		FROM Orders AS O
+		WHERE O.orderid != NEW.orderid
+		AND EXTRACT(EPOCH FROM (NEW.assignTime - NEW.orderTime))/3600 <= 0
+		OR EXTRACT(EPOCH FROM (NEW.arrivalTime - NEW.assignTime))/3600 <= 0
+		OR EXTRACT(EPOCH FROM (NEW.departTime - NEW.arrivalTime))/3600 <= 0
+		OR EXTRACT(EPOCH FROM (NEW.deliveryTime - NEW.departTime))/3600 <= 0;
+
+	IF new_order IS NOT NULL THEN
+		RAISE EXCEPTION '% is an invalid order. Please check the timestamps.', NEW.orderid;
+	END IF ;
+	RETURN NULL;
+END;
+$$ LANGUAGE plpgsql ;
+
+DROP TRIGGER IF EXISTS order_date_trigger ON Orders CASCADE;
+
+CREATE TRIGGER order_date_trigger
+	BEFORE UPDATE OF ordertime, assigntime, arrivaltime, departtime, deliverytime OR INSERT
+	ON Orders
+	FOR EACH ROW 
+	EXECUTE PROCEDURE check_orders_date_constraint();
+
