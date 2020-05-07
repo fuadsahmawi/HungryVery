@@ -271,6 +271,7 @@ const RestaurantStaff = () => {
                 ))}
             </DropdownButton>
             <h4 className="text-center mt-5">Staff Summary Table</h4>
+            <br/>
             <table class="table">
                 <thead>
                     <tr>
@@ -290,7 +291,8 @@ const RestaurantStaff = () => {
                 </tbody>
             </table>
             <br />
-            <h4 className="text-center mt-5">Top-Five items for restaurant</h4>
+            <h4 className="text-center mt-5">Top Five Items</h4>
+            <br/>
             <table class="table">
                 <thead>
                     <tr>
@@ -309,6 +311,7 @@ const RestaurantStaff = () => {
             </table>
             <br />
             <h4 className="text-center mt-5">Promotion Summary Table</h4>
+            <br/>
             <table class="table">
                 <thead>
                     <tr>

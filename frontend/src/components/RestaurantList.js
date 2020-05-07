@@ -251,11 +251,12 @@ const RestaurantList = () => {
       			<Dropdown.Item key = { restaurant.rid } eventKey={restaurant.rid}>{restaurant.rname}</Dropdown.Item>
       		))}	
       		</DropdownButton>
-          <button onClick={() => setView(0)}>Menu</button>
-          <button onClick={() => setView(1)}>Reviews</button>
+          <br/>
+          <center>
+          <button onClick={() => setView(0)}>Menu</button>{" "}
+          <button onClick={() => setView(1)}>Reviews</button>{" "}
           <button onClick={() => setView(2)}>Cart</button>
-          
-			<br/>
+          </center>
       {menuFrag}
       {reviewFrag}
       {cartFrag}

@@ -23,8 +23,10 @@ const CustomerCRUD = () => {
                 body: JSON.stringify(body)
             });
             console.log(response);
+            NotificationManager.success('Details Updated', 'Successful!', 2000);
         } catch (err) {
             console.error(err.message);
+            NotificationManager.error('Check whether Customer ID is correct', 'Error', 2000);
         }
     };
 
@@ -35,7 +37,7 @@ const CustomerCRUD = () => {
                 method: "DELETE"
             });
             console.log(response);
-            NotificationManager.success('Customer Deleted', 'Successful', 2000);
+            NotificationManager.success('Customer Deleted', 'Successful!', 2000);
         } catch (err) {
             console.error(err.message);
             NotificationManager.error('Check whether Customer ID is correct', 'Error', 2000);
