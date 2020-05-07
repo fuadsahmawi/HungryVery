@@ -176,6 +176,11 @@ CREATE TABLE PostalDistrict (
 	PRIMARY KEY (district,sector)
 );
 
+/* Drop Triggers */
+
+/* Trigger */
+
+
 /* Populate Tables */
 
 /* Populate Customers */
@@ -1791,56 +1796,56 @@ insert into Food (fname, amountOrdered, orderLimit, price) values ('Sunzen', 37,
 
 /* Populate Promotions */
 
-insert into Promotions (pname, discount, StartDateTime, EndDateTime) values ('bpetcher0', 0.03, '2020-01-04 06:58:11', '2019-08-10 00:43:31');
-insert into Promotions (pname, discount, StartDateTime, EndDateTime) values ('sjoice1', 0.8, '2020-01-30 15:42:23', '2019-09-18 19:40:10');
-insert into Promotions (pname, discount, StartDateTime, EndDateTime) values ('mgeldeford2', 0.02, '2020-01-21 21:21:49', '2019-09-25 10:37:23');
-insert into Promotions (pname, discount, StartDateTime, EndDateTime) values ('mgras3', 0.5, '2020-01-07 16:53:28', '2019-10-01 10:33:25');
-insert into Promotions (pname, discount, StartDateTime, EndDateTime) values ('dhaldenby4', 0.66, '2020-01-19 11:36:10', '2019-09-11 15:01:51');
-insert into Promotions (pname, discount, StartDateTime, EndDateTime) values ('fmaccomiskey5', 0.72, '2020-01-22 10:10:10', '2019-08-09 14:48:08');
-insert into Promotions (pname, discount, StartDateTime, EndDateTime) values ('aharvey6', 0.08, '2020-01-29 11:58:30', '2019-04-11 20:24:57');
-insert into Promotions (pname, discount, StartDateTime, EndDateTime) values ('tbroader7', 0.17, '2020-01-24 14:45:25', '2019-07-25 20:29:08');
-insert into Promotions (pname, discount, StartDateTime, EndDateTime) values ('rfrankiss8', 0.46, '2020-01-08 23:34:59', '2019-07-07 10:55:05');
-insert into Promotions (pname, discount, StartDateTime, EndDateTime) values ('mbrownsmith9', 0.26, '2020-01-13 20:13:32', '2019-06-14 15:56:08');
-insert into Promotions (pname, discount, StartDateTime, EndDateTime) values ('pprydea', 0.95, '2020-01-25 16:22:14', '2019-03-25 18:56:42');
-insert into Promotions (pname, discount, StartDateTime, EndDateTime) values ('dfulgerb', 0.48, '2020-01-26 07:25:16', '2020-01-16 06:44:55');
-insert into Promotions (pname, discount, StartDateTime, EndDateTime) values ('dcawcuttc', 0.09, '2020-01-07 13:35:55', '2020-01-17 21:45:09');
-insert into Promotions (pname, discount, StartDateTime, EndDateTime) values ('ahovertd', 0.74, '2020-01-09 03:44:35', '2020-01-18 21:48:21');
-insert into Promotions (pname, discount, StartDateTime, EndDateTime) values ('blightfoote', 0.69, '2020-01-15 11:00:49', '2019-06-13 13:01:22');
-insert into Promotions (pname, discount, StartDateTime, EndDateTime) values ('ccolegrovef', 0.79, '2020-01-31 21:56:43', '2019-04-11 17:11:04');
-insert into Promotions (pname, discount, StartDateTime, EndDateTime) values ('cackerleyg', 0.75, '2020-01-30 09:55:42', '2019-11-14 05:29:58');
-insert into Promotions (pname, discount, StartDateTime, EndDateTime) values ('scrookh', 0.83, '2020-01-16 17:52:14', '2020-01-03 21:14:38');
-insert into Promotions (pname, discount, StartDateTime, EndDateTime) values ('agrabbami', 1.0, '2020-01-14 10:49:24', '2019-03-23 20:25:23');
-insert into Promotions (pname, discount, StartDateTime, EndDateTime) values ('rwasmerj', 0.93, '2020-01-17 22:42:36', '2019-12-28 05:05:37');
-insert into Promotions (pname, discount, StartDateTime, EndDateTime) values ('jrobertok', 0.31, '2020-01-22 12:45:32', '2019-06-03 19:36:38');
-insert into Promotions (pname, discount, StartDateTime, EndDateTime) values ('cpescottl', 0.52, '2020-01-23 05:35:08', '2019-12-30 18:45:18');
-insert into Promotions (pname, discount, StartDateTime, EndDateTime) values ('gyankovm', 0.13, '2020-01-19 19:16:58', '2019-06-14 04:01:16');
-insert into Promotions (pname, discount, StartDateTime, EndDateTime) values ('akuhnertn', 0.28, '2020-01-26 05:45:52', '2019-10-08 15:53:56');
-insert into Promotions (pname, discount, StartDateTime, EndDateTime) values ('amccunno', 0.44, '2020-01-18 12:23:11', '2019-02-08 21:40:03');
-insert into Promotions (pname, discount, StartDateTime, EndDateTime) values ('hwallmanp', 0.2, '2020-01-22 02:05:27', '2019-05-23 16:21:19');
-insert into Promotions (pname, discount, StartDateTime, EndDateTime) values ('tkoppkeq', 0.86, '2020-01-01 06:39:52', '2019-09-07 14:52:10');
-insert into Promotions (pname, discount, StartDateTime, EndDateTime) values ('zfranker', 0.34, '2020-01-08 20:03:37', '2019-09-21 00:09:10');
-insert into Promotions (pname, discount, StartDateTime, EndDateTime) values ('hgatisss', 0.09, '2020-01-17 11:48:52', '2019-11-29 12:51:21');
-insert into Promotions (pname, discount, StartDateTime, EndDateTime) values ('mthackrayt', 0.24, '2020-01-06 23:46:31', '2019-12-27 07:45:44');
-insert into Promotions (pname, discount, StartDateTime, EndDateTime) values ('kpenneyu', 0.78, '2020-01-17 03:27:27', '2020-01-21 13:43:21');
-insert into Promotions (pname, discount, StartDateTime, EndDateTime) values ('lbaudonev', 0.68, '2020-01-19 14:05:18', '2019-06-28 03:56:34');
-insert into Promotions (pname, discount, StartDateTime, EndDateTime) values ('bbransdenw', 0.62, '2020-01-21 02:54:56', '2019-06-04 21:30:14');
-insert into Promotions (pname, discount, StartDateTime, EndDateTime) values ('spellamonutenx', 0.83, '2020-01-06 02:48:54', '2019-12-14 20:37:04');
-insert into Promotions (pname, discount, StartDateTime, EndDateTime) values ('meppersony', 0.64, '2020-01-25 20:14:43', '2019-10-20 07:51:08');
-insert into Promotions (pname, discount, StartDateTime, EndDateTime) values ('pmcconnachiez', 0.02, '2020-01-12 12:45:17', '2019-11-16 20:09:49');
-insert into Promotions (pname, discount, StartDateTime, EndDateTime) values ('ihazeldene10', 0.14, '2020-01-17 04:59:13', '2019-04-25 11:44:49');
-insert into Promotions (pname, discount, StartDateTime, EndDateTime) values ('cblaschek11', 0.37, '2020-01-06 18:54:29', '2019-04-27 05:33:36');
-insert into Promotions (pname, discount, StartDateTime, EndDateTime) values ('gcousans12', 0.8, '2020-01-31 17:14:01', '2019-04-10 19:04:59');
-insert into Promotions (pname, discount, StartDateTime, EndDateTime) values ('merangey13', 0.53, '2020-01-16 16:44:01', '2019-12-20 01:15:51');
-insert into Promotions (pname, discount, StartDateTime, EndDateTime) values ('fsunman14', 0.17, '2020-01-01 08:29:24', '2019-12-24 02:51:56');
-insert into Promotions (pname, discount, StartDateTime, EndDateTime) values ('jsebring15', 0.4, '2020-01-29 09:52:03', '2019-05-10 02:19:35');
-insert into Promotions (pname, discount, StartDateTime, EndDateTime) values ('ewiggam16', 0.04, '2020-01-28 18:25:56', '2019-05-06 06:26:14');
-insert into Promotions (pname, discount, StartDateTime, EndDateTime) values ('cdunnett17', 0.16, '2020-01-07 00:21:55', '2020-02-22 23:58:32');
-insert into Promotions (pname, discount, StartDateTime, EndDateTime) values ('ddimitrescu18', 0.42, '2020-01-19 14:21:14', '2019-08-10 08:35:40');
-insert into Promotions (pname, discount, StartDateTime, EndDateTime) values ('cjotcham19', 0.44, '2020-01-29 14:20:32', '2019-03-22 19:08:31');
-insert into Promotions (pname, discount, StartDateTime, EndDateTime) values ('ncircuit1a', 0.2, '2020-01-13 08:22:50', '2019-06-22 23:00:38');
-insert into Promotions (pname, discount, StartDateTime, EndDateTime) values ('abonnick1b', 0.11, '2020-01-23 21:03:43', '2019-06-17 13:16:30');
-insert into Promotions (pname, discount, StartDateTime, EndDateTime) values ('gaffron1c', 0.34, '2020-01-28 04:37:11', '2019-05-20 01:05:19');
-insert into Promotions (pname, discount, StartDateTime, EndDateTime) values ('llabrenz1d', 0.7, '2020-01-02 10:01:11', '2019-12-14 23:39:52');
+insert into Promotions (pname, discount, StartDateTime, EndDateTime) values ('bpetcher0',0.03,'2020-01-04 06:58:11','2020-02-04 06:58:11');
+insert into Promotions (pname, discount, StartDateTime, EndDateTime) values ('sjoice1',0.8,'2020-01-30 15:42:23','2020-02-30 15:42:23');
+insert into Promotions (pname, discount, StartDateTime, EndDateTime) values ('mgeldeford2',0.02,'2020-01-21 21:21:49','2020-02-21 21:21:49');
+insert into Promotions (pname, discount, StartDateTime, EndDateTime) values ('mgras3',0.5,'2020-01-07 16:53:28','2020-02-07 16:53:28');
+insert into Promotions (pname, discount, StartDateTime, EndDateTime) values ('dhaldenby4',0.66,'2020-01-19 11:36:10','2020-02-19 11:36:10');
+insert into Promotions (pname, discount, StartDateTime, EndDateTime) values ('fmaccomiskey5',0.72,'2020-01-22 10:10:10','2020-02-22 10:10:10');
+insert into Promotions (pname, discount, StartDateTime, EndDateTime) values ('aharvey6',0.08,'2020-01-29 11:58:30','2020-02-29 11:58:30');
+insert into Promotions (pname, discount, StartDateTime, EndDateTime) values ('tbroader7',0.17,'2020-01-24 14:45:25','2020-02-24 14:45:25');
+insert into Promotions (pname, discount, StartDateTime, EndDateTime) values ('rfrankiss8',0.46,'2020-01-08 23:34:59','2020-02-08 23:34:59');
+insert into Promotions (pname, discount, StartDateTime, EndDateTime) values ('mbrownsmith9',0.26,'2020-01-13 20:13:32','2020-02-13 20:13:32');
+insert into Promotions (pname, discount, StartDateTime, EndDateTime) values ('pprydea',0.95,'2020-01-25 16:22:14','2020-02-25 16:22:14');
+insert into Promotions (pname, discount, StartDateTime, EndDateTime) values ('dfulgerb',0.48,'2020-01-26 07:25:16','2020-02-26 07:25:16');
+insert into Promotions (pname, discount, StartDateTime, EndDateTime) values ('dcawcuttc',0.09,'2020-01-07 13:35:55','2020-02-07 13:35:55');
+insert into Promotions (pname, discount, StartDateTime, EndDateTime) values ('ahovertd',0.74,'2020-01-09 03:44:35','2020-02-09 03:44:35');
+insert into Promotions (pname, discount, StartDateTime, EndDateTime) values ('blightfoote',0.69,'2020-01-15 11:00:49','2020-02-15 11:00:49');
+insert into Promotions (pname, discount, StartDateTime, EndDateTime) values ('ccolegrovef',0.79,'2020-01-31 21:56:43','2020-02-31 21:56:43');
+insert into Promotions (pname, discount, StartDateTime, EndDateTime) values ('cackerleyg',0.75,'2020-01-30 09:55:42','2020-02-30 09:55:42');
+insert into Promotions (pname, discount, StartDateTime, EndDateTime) values ('scrookh',0.83,'2020-01-16 17:52:14','2020-02-16 17:52:14');
+insert into Promotions (pname, discount, StartDateTime, EndDateTime) values ('agrabbami',1.0,'2020-01-14 10:49:24','2020-02-14 10:49:24');
+insert into Promotions (pname, discount, StartDateTime, EndDateTime) values ('rwasmerj',0.93,'2020-01-17 22:42:36','2020-02-17 22:42:36');
+insert into Promotions (pname, discount, StartDateTime, EndDateTime) values ('jrobertok',0.31,'2020-01-22 12:45:32','2020-02-22 12:45:32');
+insert into Promotions (pname, discount, StartDateTime, EndDateTime) values ('cpescottl',0.52,'2020-01-23 05:35:08','2020-02-23 05:35:08');
+insert into Promotions (pname, discount, StartDateTime, EndDateTime) values ('gyankovm',0.13,'2020-01-19 19:16:58','2020-02-19 19:16:58');
+insert into Promotions (pname, discount, StartDateTime, EndDateTime) values ('akuhnertn',0.28,'2020-01-26 05:45:52','2020-02-26 05:45:52');
+insert into Promotions (pname, discount, StartDateTime, EndDateTime) values ('amccunno',0.44,'2020-01-18 12:23:11','2020-02-18 12:23:11');
+insert into Promotions (pname, discount, StartDateTime, EndDateTime) values ('hwallmanp',0.2,'2020-01-22 02:05:27','2020-02-22 02:05:27');
+insert into Promotions (pname, discount, StartDateTime, EndDateTime) values ('tkoppkeq',0.86,'2020-01-01 06:39:52','2020-02-01 06:39:52');
+insert into Promotions (pname, discount, StartDateTime, EndDateTime) values ('zfranker',0.34,'2020-01-08 20:03:37','2020-02-08 20:03:37');
+insert into Promotions (pname, discount, StartDateTime, EndDateTime) values ('hgatisss',0.09,'2020-01-17 11:48:52','2020-02-17 11:48:52');
+insert into Promotions (pname, discount, StartDateTime, EndDateTime) values ('mthackrayt',0.24,'2020-01-06 23:46:31','2020-02-06 23:46:31');
+insert into Promotions (pname, discount, StartDateTime, EndDateTime) values ('kpenneyu',0.78,'2020-01-17 03:27:27','2020-02-17 03:27:27');
+insert into Promotions (pname, discount, StartDateTime, EndDateTime) values ('lbaudonev',0.68,'2020-01-19 14:05:18','2020-02-19 14:05:18');
+insert into Promotions (pname, discount, StartDateTime, EndDateTime) values ('bbransdenw',0.62,'2020-01-21 02:54:56','2020-02-21 02:54:56');
+insert into Promotions (pname, discount, StartDateTime, EndDateTime) values ('spellamonutenx',0.83,'2020-01-06 02:48:54','2020-02-06 02:48:54');
+insert into Promotions (pname, discount, StartDateTime, EndDateTime) values ('meppersony',0.64,'2020-01-25 20:14:43','2020-02-25 20:14:43');
+insert into Promotions (pname, discount, StartDateTime, EndDateTime) values ('pmcconnachiez',0.02,'2020-01-12 12:45:17','2020-02-12 12:45:17');
+insert into Promotions (pname, discount, StartDateTime, EndDateTime) values ('ihazeldene10',0.14,'2020-01-17 04:59:13','2020-02-17 04:59:13');
+insert into Promotions (pname, discount, StartDateTime, EndDateTime) values ('cblaschek11',0.37,'2020-01-06 18:54:29','2020-02-06 18:54:29');
+insert into Promotions (pname, discount, StartDateTime, EndDateTime) values ('gcousans12',0.8,'2020-01-31 17:14:01','2020-02-31 17:14:01');
+insert into Promotions (pname, discount, StartDateTime, EndDateTime) values ('merangey13',0.53,'2020-01-16 16:44:01','2020-02-16 16:44:01');
+insert into Promotions (pname, discount, StartDateTime, EndDateTime) values ('fsunman14',0.17,'2020-01-01 08:29:24','2020-02-01 08:29:24');
+insert into Promotions (pname, discount, StartDateTime, EndDateTime) values ('jsebring15',0.4,'2020-01-29 09:52:03','2020-02-29 09:52:03');
+insert into Promotions (pname, discount, StartDateTime, EndDateTime) values ('ewiggam16',0.04,'2020-01-28 18:25:56','2020-02-28 18:25:56');
+insert into Promotions (pname, discount, StartDateTime, EndDateTime) values ('cdunnett17',0.16,'2020-01-07 00:21:55','2020-02-07 00:21:55');
+insert into Promotions (pname, discount, StartDateTime, EndDateTime) values ('ddimitrescu18',0.42,'2020-01-19 14:21:14','2020-02-19 14:21:14');
+insert into Promotions (pname, discount, StartDateTime, EndDateTime) values ('cjotcham19',0.44,'2020-01-29 14:20:32','2020-02-29 14:20:32');
+insert into Promotions (pname, discount, StartDateTime, EndDateTime) values ('ncircuit1a',0.2,'2020-01-13 08:22:50','2020-02-13 08:22:50');
+insert into Promotions (pname, discount, StartDateTime, EndDateTime) values ('abonnick1b',0.11,'2020-01-23 21:03:43','2020-02-23 21:03:43');
+insert into Promotions (pname, discount, StartDateTime, EndDateTime) values ('gaffron1c',0.34,'2020-01-28 04:37:11','2020-02-28 04:37:11');
+insert into Promotions (pname, discount, StartDateTime, EndDateTime) values ('llabrenz1d',0.7,'2020-01-02 10:01:11','2020-02-02 10:01:11');
 
 /* Populate Managers */
 

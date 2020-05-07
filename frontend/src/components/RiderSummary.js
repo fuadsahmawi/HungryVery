@@ -1,8 +1,27 @@
 import React, { Fragment, useEffect, useState } from "react";
 
 const RiderSummary = () => {
+    const [update_riderid, seturid] = useState("");
+    const [name, setName] = useState("");
+    const [vnumber, setvnumber] = useState("");
+
     const [riderid, setRider] = useState("");
     const [summary, setSummary] = useState([]);
+
+    const putUpdate = async (e) => {
+        e.preventDefault();
+        try {
+            const body = {name,vnumber}
+            const response = await fetch("http://localhost:3001/rider/" + update_riderid,{
+                method: "PUT",
+                headers: {"Content-Type":"application/json"},
+                body: JSON.stringify(body)
+            });
+            console.log(response);
+        } catch (err) {
+            console.error(err.message);
+        }
+    };
 
     const getSummary = async (evt) => {
         evt.preventDefault();
@@ -22,7 +41,32 @@ const RiderSummary = () => {
 
     return (
         <Fragment>
-            <h4 className="text-center mt-5">Rider Summary Page</h4>
+            <h4 className="text-center mt-5">Update Rider Details</h4>
+            <form className="d-flex mt-5" onSubmit={putUpdate}>
+                <input 
+                    type="text" 
+                    className="form-control" 
+                    value={update_riderid} 
+                    placeholder="Rider ID"
+                    onChange={e => seturid(e.target.value)}>
+                </input>
+                <input 
+                    type="text" 
+                    className="form-control" 
+                    value={name} 
+                    placeholder="Rider Name"
+                    onChange={e => setName(e.target.value)}>
+                </input>
+                <input 
+                    type="text" 
+                    className="form-control" 
+                    value={vnumber} 
+                    placeholder="Vehicle Number"
+                    onChange={e => setvnumber(e.target.value)}>
+                </input>
+                <button className="btn btn-success">Update Details</button>
+            </form>
+            <h4 className="text-center mt-5">Rider Summary</h4>
             <form className="d-flex mt-5" onSubmit={getSummary}>
                 <input 
                     type="text" 

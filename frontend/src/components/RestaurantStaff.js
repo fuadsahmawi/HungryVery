@@ -18,6 +18,24 @@ const RestaurantStaff = () => {
     const [orderLimit, setOrderLimit] = useState("");
     const [price, setPrice] = useState("");
 
+    const [sname,setSname] = useState("");
+    const [rid, setRid] = useState("");
+
+    const postStaff = async (e) => {
+        e.preventDefault();
+        try {
+            const body = {sname,rid}
+            const response = await fetch("http://localhost:3001/rstaff",{
+                method: "POST",
+                headers: {"Content-Type":"application/json"},
+                body: JSON.stringify(body)
+            });
+            console.log(response);
+        } catch (err) {
+            console.error(err.message);
+        }
+    }; 
+
     const postFood = async (e) => {
         e.preventDefault();
         try {
@@ -85,6 +103,24 @@ const RestaurantStaff = () => {
                     <Dropdown.Item key={restaurant.rid} eventKey={restaurant.rid}>{restaurant.rname}</Dropdown.Item>
                 ))}
             </DropdownButton>
+            <h4 className="text-center mt-5">Staff Update</h4>
+            <form className="d-flex mt-5" onSubmit={postStaff}>
+                <input 
+                    type="text" 
+                    className="form-control" 
+                    value={sname} 
+                    placeholder="Type new staff name here"
+                    onChange={e => setSname(e.target.value)}>
+                </input>
+                <input 
+                    type="text" 
+                    className="form-control" 
+                    value={rid} 
+                    placeholder="Type Restaurant ID here"
+                    onChange={e => setRid(e.target.value)}>
+                </input>
+                <button className="btn btn-success">Submit</button>
+            </form>
             <h4 className="text-center mt-5">Upload new food item</h4>
             <form className="d-flex mt-5" onSubmit={postFood}>
                 <input 

@@ -58,6 +58,53 @@ const deleteCustomer = (request, response) => {
   })
 }
 
+// Add new rider (Manager POV)
+
+const addRider = (request, response) => {
+  const { rname, vnumber, mid } = request.body
+  pool.query('INSERT INTO riders(ridername, vnumber,mid) VALUES ($1, $2) RETURNING *', [rname, vnumber,mid], (error, results) => {
+    if (error) {
+      throw error
+    }
+    response.status(200).json(results.rows)
+  })
+}
+
+// Update details of rider (Rider POV)
+
+const updateRider = (request, response) => {
+  const { rid } = request.params
+  const { rname, vnumber } = request.body
+  pool.query('UPDATE riders SET ridername = $1, vnumber = $2 WHERE riderid = $3', [rname, vnumber, rid], (error, results) => {
+    if (error) {
+      throw error
+    }
+    response.status(200).json(results.rows)
+  })
+}
+
+// Delete Fulltimer rider (Manager POV)
+
+const deleteFulltimer = (request, response) => {
+  const { rid } = request.params
+  pool.query('DELETE FROM fulltimer WHERE riderid = $1', [rid], (error, results) => {
+    if (error) {
+      throw error
+    }
+    response.status(200).json(results.rows)
+  })
+}
+
+const deleteParttimer = (request, response) => {
+  const { rid } = request.params
+  pool.query('DELETE FROM parttimer WHERE riderid = $1', [rid], (error, results) => {
+    if (error) {
+      throw error
+    }
+    response.status(200).json(results.rows)
+  })
+}
+
 // List of Restaurants
 
 const restaurantList = (request, response) => {
@@ -344,6 +391,10 @@ module.exports = {
   addStaff,
   deleteCustomer,
   updateCustomer,
+  addRider,
+  updateRider,
+  deleteFulltimer,
+  deleteParttimer,
   foodList,
   reviewList,
   addFood,
