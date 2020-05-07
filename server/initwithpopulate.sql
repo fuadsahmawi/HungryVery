@@ -11933,8 +11933,9 @@ BEGIN
 		AND EXTRACT(EPOCH FROM (NEW.enddatetime-NEW.startdatetime))/3600 <= 0;
 	IF promo IS NOT NULL THEN
 		RAISE EXCEPTION '% (promoid: %) is an invalid promotion, end date should be later than start date.', NEW.pname, NEW.promoid;
+		RETURN NULL;
 	END IF ;
-	RETURN NULL;
+	RETURN NEW;
 END;
 $$ LANGUAGE plpgsql ;
 
@@ -11966,8 +11967,9 @@ BEGIN
 
 	IF new_order IS NOT NULL THEN
 		RAISE EXCEPTION '% is an invalid order. Please check the timestamps.', NEW.orderid;
+		RETURN NULL;
 	END IF ;
-	RETURN NULL;
+	RETURN NEW;
 END;
 $$ LANGUAGE plpgsql ;
 
