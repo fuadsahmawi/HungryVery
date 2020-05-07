@@ -21,6 +21,14 @@ const RestaurantStaff = () => {
     const [sname,setSname] = useState("");
     const [rid, setRid] = useState("");
 
+    const [newname, setnewname] = useState('');
+    const [staffid, setstaffid] = useState('');
+
+    const [pname,setpname] = useState('');
+    const [discount, setdiscount] = useState('');
+    const [startdate, setstart] = useState();
+    const [enddate, setend] = useState();
+
     const postStaff = async (e) => {
         e.preventDefault();
         try {
@@ -36,11 +44,41 @@ const RestaurantStaff = () => {
         }
     }; 
 
+    const updateStaff = async (e) => {
+        e.preventDefault();
+        try {
+            const body = {newname}
+            const response = await fetch("http://localhost:3001/rstaff/" + staffid,{
+                method: "PUT",
+                headers: {"Content-Type":"application/json"},
+                body: JSON.stringify(body)
+            });
+            console.log(response);
+        } catch (err) {
+            console.error(err.message);
+        }
+    }; 
+
     const postFood = async (e) => {
         e.preventDefault();
         try {
             const body = {fname,category,amountOrdered,orderLimit,price}
             const response = await fetch("http://localhost:3001/food",{
+                method: "POST",
+                headers: {"Content-Type":"application/json"},
+                body: JSON.stringify(body)
+            });
+            console.log(response);
+        } catch (err) {
+            console.error(err.message);
+        }
+    }; 
+
+    const postPromotion = async (e) => {
+        e.preventDefault();
+        try {
+            const body = {pname,discount,startdate,enddate}
+            const response = await fetch("http://localhost:3001/promotions",{
                 method: "POST",
                 headers: {"Content-Type":"application/json"},
                 body: JSON.stringify(body)
@@ -117,6 +155,24 @@ const RestaurantStaff = () => {
                 </input>
                 <button className="btn btn-success">Submit</button>
             </form>
+            <h4 className="text-center mt-5">Update Staff Name</h4>
+            <form className="d-flex mt-5" onSubmit={updateStaff}>
+                <input 
+                    type="text" 
+                    className="form-control" 
+                    value={newname} 
+                    placeholder="Type new staff name here"
+                    onChange={e => setnewname(e.target.value)}>
+                </input>
+                <input 
+                    type="text" 
+                    className="form-control" 
+                    value={staffid} 
+                    placeholder="Type Staff ID here"
+                    onChange={e => setstaffid(e.target.value)}>
+                </input>
+                <button className="btn btn-success">Submit</button>
+            </form>
             <h4 className="text-center mt-5">Upload new food item</h4>
             <form className="d-flex mt-5" onSubmit={postFood}>
                 <input 
@@ -155,6 +211,37 @@ const RestaurantStaff = () => {
                     onChange={e => setPrice(e.target.value)}>
                 </input>
                 
+                <button className="btn btn-success">Submit</button>
+            </form>
+            
+            <h4 className="text-center mt-5">Add New Promotion</h4>
+            <form className="d-flex mt-5" onSubmit={postPromotion}>
+                <input 
+                    type="text" 
+                    className="form-control" 
+                    value={pname} 
+                    placeholder="Type Promotion name here"
+                    onChange={e => setpname(e.target.value)}>
+                </input>
+                <input 
+                    type="text" 
+                    className="form-control" 
+                    value={discount} 
+                    placeholder="Type Discount here"
+                    onChange={e => setdiscount(e.target.value)}>
+                </input>
+                <input 
+                    type="datetime-local" 
+                    className="form-control" 
+                    value={startdate} 
+                    onChange={e => setstart(e.target.value)}>
+                </input>
+                <input 
+                    type="datetime-local" 
+                    className="form-control" 
+                    value={enddate} 
+                    onChange={e => setend(e.target.value)}>
+                </input>
                 <button className="btn btn-success">Submit</button>
             </form>
 

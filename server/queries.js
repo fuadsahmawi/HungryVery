@@ -98,8 +98,8 @@ const updateRider = (request, response) => {
 // Delete Fulltimer rider (Manager POV)
 
 const deleteFulltimer = (request, response) => {
-  const { rid } = request.params
-  pool.query('DELETE FROM fulltimer WHERE riderid = $1', [rid], (error, results) => {
+  const { riderid } = request.params
+  pool.query('DELETE FROM fulltimer WHERE riderid = $1', [riderid], (error, results) => {
     if (error) {
       throw error
     }
@@ -108,8 +108,8 @@ const deleteFulltimer = (request, response) => {
 }
 
 const deleteParttimer = (request, response) => {
-  const { rid } = request.params
-  pool.query('DELETE FROM parttimer WHERE riderid = $1', [rid], (error, results) => {
+  const { riderid } = request.params
+  pool.query('DELETE FROM parttimer WHERE riderid = $1', [riderid], (error, results) => {
     if (error) {
       throw error
     }
@@ -224,18 +224,29 @@ const addStaff = (request, response) => {
   })
 }
 
-// Add new promotion staff
+// Add new restaurant staff
 
-const addPromotion = (request, response) => {
-  const { promoid, pname, discount, StartDateTime, EndDateTime } = request.body
-  pool.query('INSERT INTO Promotions (promoid, pname, discount, StartDateTime, EndDateTime) RETURNING *', [sname, rid], (error, results) => {
+const updateStaff = (request, response) => {
+  const { staffid } = request.params
+  const { newname } = request.body
+  pool.query('UPDATE Staff SET sname = $1 where staffid = $2', [newname, staffid], (error, results) => {
     if (error) {
       throw error
     }
     response.status(200).json(results.rows)
   })
 }
+// Add new promotion staff
 
+const addPromotion = (request, response) => {
+  const { pname, discount, startdate, enddate } = request.body
+  pool.query('INSERT INTO Promotions(pname,discount,StartDateTime,EndDateTime) VALUES ($1, $2, $3, $4) RETURNING *', [pname, discount, startdate, enddate], (error, results) => {
+    if (error) {
+      throw error
+    }
+    response.status(200).json(results.rows)
+  })
+}
 
 
 // Summary information for FDS managers:
@@ -351,7 +362,6 @@ const topFiveFoodItems = (request, response) => {
 // Promo Campaign: for each campaign, duration (days/hours), avg and total number of orders
 // TODO: avg number of orders per promo campaign
 const promotionsSummary = (request, response) => {
-  const rid = parseInt(request.params.rid)
   pool.query(
     'SELECT P.promoid, P.pname, ' +
     'COALESCE(DATE_PART(\'day\', enddatetime::timestamp-startdatetime::timestamp), DATE_PART(\'day\', NOW()::timestamp-startdatetime::timestamp)) as daysDuration, ' +
@@ -362,8 +372,7 @@ const promotionsSummary = (request, response) => {
     'FROM Promotions AS P, Sells AS S, Makes as M ' +
     'WHERE M.foodid = S.foodid ' +
     'AND S.promoid = P.promoid ' +
-    'AND S.rid = $1 ' +
-    'GROUP BY P.promoid ', [rid], (error, results) => {
+    'GROUP BY P.promoid ', (error, results) => {
       if (error) {
         throw error
       }
@@ -418,6 +427,7 @@ module.exports = {
   getCustomer,
   addCustomer,
   addStaff,
+  updateStaff,
   addPromotion,
   deleteCustomer,
   updateCustomer,
@@ -441,6 +451,7 @@ module.exports = {
   topFiveFoodItems,
   promotionsList
 }
+
 
 /* Get all users
 const getUsers = (request, response) => {
