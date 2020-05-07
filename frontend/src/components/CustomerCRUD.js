@@ -1,4 +1,7 @@
 import React, { Fragment, useEffect, useState } from "react";
+import { NotificationContainer } from 'react-notifications';
+import 'react-notifications/lib/notifications.css';
+import { NotificationManager } from 'react-notifications';
 
 const CustomerCRUD = () => {
     const [cid, setcid] = useState('');
@@ -61,6 +64,7 @@ const CustomerCRUD = () => {
                 body: JSON.stringify(body)
             });
             console.log(response);
+            NotificationManager.success('New customer added!', 'Successful!', 2000);
         } catch (err) {
             console.error(err.message);
         }
@@ -158,6 +162,7 @@ const CustomerCRUD = () => {
             </form>
             
             <br />
+            <NotificationContainer/>
         </Fragment>
     )
 }
