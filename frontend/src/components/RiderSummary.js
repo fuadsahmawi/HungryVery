@@ -1,20 +1,20 @@
 import React, { Fragment, useEffect, useState } from "react";
 
 const RiderSummary = () => {
-    const [update_riderid, seturid] = useState("");
-    const [name, setName] = useState("");
-    const [vnumber, setvnumber] = useState("");
+    const [update_riderid, seturid] = useState('');
+    const [ridername, setName] = useState('');
+    const [vnumber, setvnumber] = useState('');
 
-    const [riderid, setRider] = useState("");
+    const [riderid, setRider] = useState('');
     const [summary, setSummary] = useState([]);
 
-    const putUpdate = async (e) => {
+    const postUpdate = async (e) => {
         e.preventDefault();
         try {
-            const body = {name,vnumber}
-            const response = await fetch("http://localhost:3001/rider/" + update_riderid,{
-                method: "PUT",
-                headers: {"Content-Type":"application/json"},
+            const body = {ridername,vnumber}
+            const response = await fetch("http://localhost:3001/riderupdate/" + update_riderid ,{
+                method: "POST",
+                headers: {"Content-Type": "application/json"},
                 body: JSON.stringify(body)
             });
             console.log(response);
@@ -42,7 +42,7 @@ const RiderSummary = () => {
     return (
         <Fragment>
             <h4 className="text-center mt-5">Update Rider Details</h4>
-            <form className="d-flex mt-5" onSubmit={putUpdate}>
+            <form className="d-flex mt-5" onSubmit={postUpdate}>
                 <input 
                     type="text" 
                     className="form-control" 
@@ -53,7 +53,7 @@ const RiderSummary = () => {
                 <input 
                     type="text" 
                     className="form-control" 
-                    value={name} 
+                    value={ridername} 
                     placeholder="Rider Name"
                     onChange={e => setName(e.target.value)}>
                 </input>
