@@ -265,15 +265,6 @@ const monthlyOrdersAndCost = (request, response) => {
   })
 }
 
-// TODO: To get new customers, ensure month is current month, and is their first order
-// const monthNewCustomers = (request, response) => {
-//   pool.query('SELECT EXTRACT(month FROM orderTime) as month, COUNT(*) as totalOrders FROM Orders GROUP BY EXTRACT(month FROM orderTime)', (error, results) => {
-//     if (error) {
-//       throw error
-//     }
-//     response.status(200).json(results.rows)
-//   })
-// }
 
 // Monthly-Customer: total number of orders by that customer, total cost of orders by that customer
 const monthlyCustomerOrderAndCost = (request, response) => {
@@ -292,16 +283,7 @@ const monthlyCustomerOrderAndCost = (request, response) => {
     })
 }
 
-// // Hour-Delivery Location: total number of orders at that hour for that location
-// const hourlyOrderSummary = (request, response) => {
-//   const location = String(request.params.location)
-//   pool.query('SELECT EXTRACT(hour FROM orderTime) as orderHour, COUNT(*) as numberOfOrders FROM Orders GROUP BY EXTRACT(hour FROM orderTime) WHERE dlocation = $1', [location], (error, results) => {
-//     if (error) {
-//       throw error
-//     }
-//     response.status(200).json(results.rows)
-//   })
-// }
+
 // district-hour-totalorder: total number of orders in that district by hours
 const hourlyOrderSummary = (request, response) => {
   const location = String(request.params.location)
@@ -368,10 +350,10 @@ const topFiveFoodItems = (request, response) => {
 const promotionsSummary = (request, response) => {
   pool.query(
     'SELECT P.promoid, P.pname, ' +
-    'COALESCE(DATE_PART(\'day\', enddatetime::timestamp-startdatetime::timestamp), DATE_PART(\'day\', NOW()::timestamp-startdatetime::timestamp)) as daysDuration, ' +
-    // 'COALESCE(DATE_PART(\'timezone_hour\', enddatetime::timestamp-startdatetime::timestamp), DATE_PART(\'timezone_hour\', NOW()::timestamp-startdatetime::timestamp)) as hoursDuration, ' +
-    // 'COALESCE((EXTRACT(EPOCH FROM (enddatetime-startdatetime))/1440), (EXTRACT(EPOCH FROM (NOW()-startdatetime))/1440)) as daysDuration, ' +
-    'COALESCE((EXTRACT(EPOCH FROM (enddatetime-startdatetime))/3600), (EXTRACT(EPOCH FROM (NOW()-startdatetime))/3600)) as hoursDuration, ' +
+    'COALESCE(DATE_PART(\'day\', enddatetime::timestamp-startdatetime::timestamp), ' +
+    'DATE_PART(\'day\', NOW()::timestamp-startdatetime::timestamp)) as daysDuration, ' +
+    'COALESCE((EXTRACT(EPOCH FROM (enddatetime-startdatetime))/3600), ' +
+    '(EXTRACT(EPOCH FROM (NOW()-startdatetime))/3600)) as hoursDuration, ' +
     'COUNT(DISTINCT M.orderid) as numberOfOrders ' +
     'FROM Promotions AS P, Sells AS S, Makes as M ' +
     'WHERE M.foodid = S.foodid ' +
@@ -383,9 +365,6 @@ const promotionsSummary = (request, response) => {
       response.status(200).json(results.rows)
     })
 }
-
-// Summary information for delivery riders:
-// Weekly-Rider: total number of orders, total hours, total salary
 
 
 // Monthly-Rider: total number of orders, total hours, total salary, average delivery time 
