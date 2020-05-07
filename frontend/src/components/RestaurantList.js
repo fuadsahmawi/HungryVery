@@ -5,11 +5,15 @@ import QuantityPicker from './QuantityPicker.js'
 
 const RestaurantList = () => {
   const [restaurant, setRestaurant] = useState([]);
+  const [selected, setSelected] = useState('');
   const [food, setFood] = useState([]);
   const [review, setReview] = useState([]);
   const [cart, setCart] = useState([]);
   const [cartPrice, setCartPrice] = useState([]);
   const [view, setView] = useState('');
+  const [cid, setCid] = useState('');
+  const [dlocation, setDlocation] = useState('');
+  const [postalcode, setPostalcode] = useState('');
 
   const getRestaurants = async () => {
   	try {
@@ -23,6 +27,7 @@ const RestaurantList = () => {
 
   const getFood = async (evt) => {
   	try {
+      setSelected(evt);
       getReview(evt);
       setCart([]);
       setCartPrice([]);
@@ -102,6 +107,23 @@ const RestaurantList = () => {
     }
     updateCart(cart);
   }
+
+  const submitOrder = async (e) => {
+    e.preventDefault();
+    try {
+        const today = new Date();
+        const timeStamp = today.getFullYear() + '-' + (today.getMonth()+1) + '-' + today.getDate() + ' ' + today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+        const body = {cart, dlocation, postalcode, timeStamp, cartPrice, selected}
+        const response = await fetch("http://localhost:3001/order/" + cid ,{
+            method: "PUT",
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify(body)
+        });
+        console.log(response);
+    } catch (err) {
+        console.error(err.message);
+    }
+};
 
   useEffect(() => {
     getRestaurants();
@@ -197,6 +219,11 @@ const RestaurantList = () => {
     </table>
     <h4 className="text-center mt-5">Confirm Order</h4>
     <br />
+    <form className="d-flex mt-5">
+      <input type="text" className="form-control" value={cid} placeholder="Customer Id" onChange={e => setCid(e.target.value)} />
+      <input type="text" className="form-control" value={dlocation} placeholder="Delivery Address" onChange={e => setDlocation(e.target.value)}/>
+      <input type="text" className="form-control" value={postalcode} placeholder="Postal Code" onChange={e => setPostalcode(e.target.value)}/>
+  </form>
     <table className="table">
       <thead>
           <tr>
@@ -208,7 +235,7 @@ const RestaurantList = () => {
         {cartPrice.map(cartPrice => (
           <tr key={cartPrice.totalPrice}>
             <td>${cartPrice.totalPrice}</td>
-            <td><button>Order</button></td>
+            <td><button onClick={submitOrder}>Order</button></td>
           </tr> 
         ))}                 
       </tbody>

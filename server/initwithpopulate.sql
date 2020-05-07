@@ -39,7 +39,7 @@ CREATE TABLE Restaurants (
 
 CREATE TABLE Food (
 	foodid 			SERIAL,
-    fname           VARCHAR(20),
+    fname           VARCHAR(60),
 	category 		VARCHAR(20),
     amountOrdered   INTEGER,
     orderLimit      INTEGER,
@@ -84,7 +84,7 @@ CREATE TABLE Orders (
     deliveryFee     FLOAT,
     totalCost       FLOAT,
     rid 			INTEGER not null,
-    riderid			INTEGER not null,
+    riderid			INTEGER,
 	PRIMARY KEY (orderid),
 	FOREIGN KEY (rid) references Restaurants,
 	FOREIGN KEY (riderid) references Riders

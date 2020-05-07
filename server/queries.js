@@ -189,6 +189,75 @@ const foodList = (request, response) => {
   })
 }
 
+// Transaction for submitting an order
+// CREATE TABLE Makes (
+// 	cid 			INTEGER,
+// 	orderid			INTEGER,
+// 	foodid			INTEGER,
+// 	amount          INTEGER,
+// 	FOREIGN KEY (cid) references Customers,
+// 	FOREIGN KEY (orderid) references Orders,
+// 	FOREIGN KEY (foodid) references Food
+// );
+
+// INSERT INTO Sells(foodid, promoid, rid) VALUES ($1, $2, $3) RETURNING *, [foodid, promoid, rid], (error, results) => {
+// insert into Makes (cid, orderid, foodid, amount) values (944, 493, 51, 2);
+
+// const submitOrder = async () => {
+//   const client = await pool.connect()
+//   const { cid } = request.params
+//   const { cart, dlocation, postalcode, selected, timeStamp, cartPrice} = request.body
+//   try {
+//     await client.query('BEGIN')
+//     // const orderInsert = 'INSERT INTO Orders (dlocation, postalcode, orderTime, assignTime, arrivalTime, departTime, deliveryTime, deliveryFee, totalCost, rid, riderid)' + 
+//     //     'VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11) RETURNING *'
+//     // const res = await client.query(orderInsert, [dlocation, postalcode, timeStamp, null, null, null, null, 5, cartPrice, selected, null])
+//     const res = client.query('SELECT foodid, fname, category, amountOrdered, orderLimit, price FROM Sells natural join Food WHERE rid = $1', [selected])
+//     console.log(res.rows)
+//     //response.status(200).json(res.rows)
+//     await client.query('COMMIT')
+//   } catch (e) {
+//     await client.query('ROLLBACK')
+//     //throw e
+//   } finally {
+//     client.release()
+//   }
+// }
+
+  const submitOrder = (request, response) => {
+    const { cid } = request.params
+    const { cart, dlocation, postalcode, selected, timeStamp, cartPrice} = request.body
+    
+    pool.connect((err, client, done) => {
+      const shouldAbort = err => {
+        if (err) {
+          console.error('Error in transaction', err.stack)
+          client.query('ROLLBACK', err => {
+            if (err) {
+              console.error('Error rolling back client', err.stack)
+            }
+            // release the client back to the pool
+            done()
+          })
+        }
+        return !!err
+      }
+      client.query('BEGIN', err => {
+        if (shouldAbort(err)) return
+        client.query('SELECT foodid, fname, category, amountOrdered, orderLimit, price FROM Sells natural join Food WHERE rid = $1', [selected], (err, res) => {
+          if (shouldAbort(err)) return
+
+            client.query('COMMIT', err => {
+              if (err) {
+                console.error('Error committing transaction', err.stack)
+              }
+              done()
+            })
+        })
+      })
+    })
+}
+
 // List of reviews by a certain Restaurant
 
 const reviewList = (request, response) => {
