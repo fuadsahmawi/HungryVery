@@ -8,9 +8,6 @@ const CustomerCRUD = () => {
     const [u_cname, setucname] = useState('');
     const [u_contact, setucontact] = useState('');
 
-    const [cname, setcname] = useState('');
-    const [contact, setcontact] = useState('');
-
     const [g_cid, setgcid] = useState('');
     const [summary, setSummary] = useState([]);
 
@@ -57,22 +54,6 @@ const CustomerCRUD = () => {
             NotificationManager.error('Check whether Customer ID is correct', 'Error', 2000);
         }
     }
-    
-    const postNewCustomer = async (evt) => {
-        evt.preventDefault();
-        try {
-            const body = {cname, contact}
-            const response = await fetch("http://localhost:3001/customer",{
-                method: "POST",
-                headers: {"Content-Type": "application/json"},
-                body: JSON.stringify(body)
-            });
-            console.log(response);
-            NotificationManager.success('New customer added!', 'Successful!', 2000);
-        } catch (err) {
-            console.error(err.message);
-        }
-    }
 // Rider-Month: total number of orders delivered, avg delivery time, 
 //              number of ratings for all orders, avg rating
 
@@ -111,24 +92,6 @@ const CustomerCRUD = () => {
                     ))}
                 </tbody>
             </table>
-            <h4 className="text-center mt-5">New Customer</h4>
-            <form className="d-flex mt-5" onSubmit={postNewCustomer}>
-                <input 
-                    type="text" 
-                    className="form-control" 
-                    value={cname} 
-                    placeholder="Type Name here"
-                    onChange={e => setcname(e.target.value)}>
-                </input>
-                <input 
-                    type="text" 
-                    className="form-control" 
-                    value={contact} 
-                    placeholder="Type Contact Number here"
-                    onChange={e => setcontact(e.target.value)}>
-                </input>
-                <button className="btn btn-success">Submit</button>
-            </form>
             <h4 className="text-center mt-5">Delete Customer</h4>
             <form className="d-flex mt-5" onSubmit={deleteCustomer}>
                 <input 

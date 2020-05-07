@@ -14,6 +14,7 @@ import Home from './Home.js';
 import Staff from './RestaurantStaff';
 import Manager from './FDSmanager.js';
 import Rider from './RiderSummary.js';
+import SignUp from './SignUp.js';
 
 const fakeAuthC = {
   isAuthenticatedC: false,
@@ -125,7 +126,10 @@ class Login extends React.Component {
               onChange={e => user.setUser(e.target.value)}>
             </input>
           </form>
+          <br/>
           <button className="btn btn-success" onClick={this.login}>Login</button>
+          <br/>
+          <SignUp/>
       </div>
     )
   }
