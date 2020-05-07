@@ -24,7 +24,8 @@ app.get('/', (request, response) => {
 
 // Add URL to the query functions
 app.get('/monthly-summary', db.monthlyOrdersAndCost)
-app.get('/customer', db.customerList)
+app.get('/customerlist', db.customerList)
+app.get('/customer/:cid',db.getCustomer)
 app.post('/customer', db.addCustomer)
 app.delete('/customer/:cid', db.deleteCustomer)
 app.put('/customer/:cid', db.updateCustomer)
@@ -48,7 +49,7 @@ app.get('/monthly-rider/:riderid', db.monthlySpecificRiderSummary)
 app.get('/monthly-delivery', db.monthlyDeliverySummary)
 app.get('/top-food/:rid', db.topFiveFoodItems)
 app.get('/monthly-restaurant/:rid', db.monthlyRestaurantSummary)
-app.get('/promotions-summary', db.promotionsSummary)
+app.get('/promotions-summary/:rid', db.promotionsSummary)
 
 app.listen(port, () => {
   console.log('Server started on port ' + port + '.')

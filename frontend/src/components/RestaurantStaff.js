@@ -78,11 +78,8 @@ const RestaurantStaff = () => {
         } catch (err) {
             console.error(err.message);
         }
-    }
-
-    const getPromotions = async (evt) => {
         try {
-            const response = await fetch("http://localhost:3001/promotions-summary");
+            const response = await fetch("http://localhost:3001/promotions-summary/" + evt);
             const jsonData = await response.json();
             setPromos(jsonData);
         } catch (err) {
@@ -92,7 +89,6 @@ const RestaurantStaff = () => {
 
     useEffect(() => {
         getRestaurants();
-        getPromotions();
     }, []);
 
     return (
@@ -103,7 +99,7 @@ const RestaurantStaff = () => {
                     <Dropdown.Item key={restaurant.rid} eventKey={restaurant.rid}>{restaurant.rname}</Dropdown.Item>
                 ))}
             </DropdownButton>
-            <h4 className="text-center mt-5">Staff Update</h4>
+            <h4 className="text-center mt-5">Add New Staff</h4>
             <form className="d-flex mt-5" onSubmit={postStaff}>
                 <input 
                     type="text" 
