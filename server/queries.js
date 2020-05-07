@@ -212,18 +212,6 @@ const promotionsList = (request, response) => {
   })
 }
 
-// Add promotion to the promotion list
-
-const addPromotion = (request, response) => {
-  const { pname, discount,startdate, enddate } = request.body
-  pool.query('INSERT INTO Promotions(pname,discount,StartDateTime,EndDateTime) VALUES ($1, $2, $3, $4) RETURNING *', [pname,discount,startdate,enddate], (error, results) => {
-    if (error) {
-      throw error
-    }
-    response.status(200).json(results.rows)
-  })
-}
-
 // Add new restaurant staff
 
 const addStaff = (request, response) => {
@@ -242,18 +230,23 @@ const updateStaff = (request, response) => {
   const { staffid } = request.params
   const { newname } = request.body
   pool.query('UPDATE Staff SET sname = $1 where staffid = $2', [newname, staffid], (error, results) => {
-// Add new promotion staff
-
-const addPromotion = (request, response) => {
-  const { promoid, pname, discount, StartDateTime, EndDateTime } = request.body
-  pool.query('INSERT INTO Promotions (promoid, pname, discount, StartDateTime, EndDateTime) RETURNING *', [sname, rid], (error, results) => {
     if (error) {
       throw error
     }
     response.status(200).json(results.rows)
   })
 }
+// Add new promotion staff
 
+const addPromotion = (request, response) => {
+  const { pname, discount, startdate, enddate } = request.body
+  pool.query('INSERT INTO Promotions(pname,discount,StartDateTime,EndDateTime) VALUES ($1, $2, $3, $4) RETURNING *', [pname, discount, startdate, enddate], (error, results) => {
+    if (error) {
+      throw error
+    }
+    response.status(200).json(results.rows)
+  })
+}
 
 
 // Summary information for FDS managers:
@@ -456,9 +449,9 @@ module.exports = {
   monthlyRestaurantSummary,
   promotionsSummary,
   topFiveFoodItems,
-  promotionsList,
-  addPromotion
+  promotionsList
 }
+
 
 /* Get all users
 const getUsers = (request, response) => {
