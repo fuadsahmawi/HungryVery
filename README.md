@@ -1,4 +1,4 @@
-# CS2102FoodDeliverySystem
+# HungryVery
 
 Ensure that there is a working version of the following before continuing:
 Node JS
